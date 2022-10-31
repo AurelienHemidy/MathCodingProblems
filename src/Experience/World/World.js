@@ -6,6 +6,7 @@ import Fox from './Fox.js';
 import LocalToWord from './LocalToWorld.js';
 import LookAtTrigger from './LookAtTrigger.js';
 import RadialTrigger from './RadialTrigger.js';
+import RaycastPlaceElementOnSphere from './RaycastPlaceElementOnSphere.js';
 
 export default class World {
   constructor() {
@@ -16,7 +17,8 @@ export default class World {
 
     // this.radialTrigger = new RadialTrigger();
     // this.lookAtTrigger = new LookAtTrigger();
-    this.localToWorld = new LocalToWord();
+    // this.localToWorld = new LocalToWord();
+    this.raycastPlaceElementOnSphere = new RaycastPlaceElementOnSphere();
 
     // Wait for resources
     this.resources.on('ready', () => {
@@ -32,5 +34,6 @@ export default class World {
     if (this.radialTrigger) this.radialTrigger.update();
     if (this.lookAtTrigger) this.lookAtTrigger.update();
     if (this.localToWorld) this.localToWorld.update();
+    if (this.raycastPlaceElementOnSphere) this.raycastPlaceElementOnSphere.update();
   }
 }
