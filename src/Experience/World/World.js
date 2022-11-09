@@ -7,6 +7,7 @@ import LocalToWord from './LocalToWorld.js';
 import LookAtTrigger from './LookAtTrigger.js';
 import RadialTrigger from './RadialTrigger.js';
 import RaycastPlaceElementOnSphere from './RaycastPlaceElementOnSphere.js';
+import Shaders from './Shaders.js';
 import SteeringBehaviour from './SteeringBehaviour.js';
 
 export default class World {
@@ -20,7 +21,8 @@ export default class World {
     // this.lookAtTrigger = new LookAtTrigger();
     // this.localToWorld = new LocalToWord();
     // this.raycastPlaceElementOnSphere = new RaycastPlaceElementOnSphere();
-    this.steeringBehaviour = new SteeringBehaviour();
+    // this.steeringBehaviour = new SteeringBehaviour();
+    this.shaders = new Shaders();
 
     // Wait for resources
     this.resources.on('ready', () => {
@@ -38,5 +40,6 @@ export default class World {
     if (this.localToWorld) this.localToWorld.update();
     if (this.raycastPlaceElementOnSphere) this.raycastPlaceElementOnSphere.update();
     if (this.steeringBehaviour) this.steeringBehaviour.update();
+    if (this.shaders) this.shaders.update();
   }
 }

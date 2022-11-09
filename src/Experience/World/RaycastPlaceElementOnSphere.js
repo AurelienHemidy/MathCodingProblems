@@ -40,7 +40,7 @@ export default class RaycastPlaceElementOnSphere {
     this.sphereMaterial = new THREE.MeshBasicMaterial({
       color: '#0000ff',
       wireframe: true,
-      side: THREE.BackSide,
+      side: THREE.FrontSide,
     });
 
     this.sphere = new THREE.Mesh(this.sphereGeometry, this.sphereMaterial);

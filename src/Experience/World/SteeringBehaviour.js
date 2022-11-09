@@ -92,19 +92,27 @@ export default class SteeringBehaviour {
 
     const intersect = this.raycaster.intersectObjects(this.objectsToTest);
 
-    console.log(intersect[0]);
+    // console.log(intersect[0]);
 
     if (intersect[0]) {
       this.seek(intersect[0].point);
 
       this.target.copy(intersect[0].point);
-      console.log('blalba');
+      // console.log('blalba');
     }
   }
 
   setArrowHelpers() {
-    this.arrowHelper = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 0), 3, 0xffff00);
-    this.scene.add(this.arrowHelper);
+    this.arrowHelperVelocity = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), this.vehicle.position, 3, 0xff00ff);
+    this.scene.add(this.arrowHelperVelocity);
+
+    this.arrowHelperAcceleration = new THREE.ArrowHelper(
+      new THREE.Vector3(1, 0, 0),
+      this.vehicle.position,
+      3,
+      0xff0000
+    );
+    this.scene.add(this.arrowHelperAcceleration);
   }
 
   setupEventListener() {
@@ -114,11 +122,25 @@ export default class SteeringBehaviour {
 
       this.raycast();
     });
+
+    window.addEventListener('mousedown', (event) => {
+      this.isMouseDown = true;
+      this.maxSpeed = 0.5;
+    });
+    window.addEventListener('mouseup', (event) => {
+      this.isMouseDown = false;
+      this.maxSpeed = 0.2;
+    });
   }
 
   updateVehicle() {
     this.velocity.add(this.acceleration);
     this.velocity.clampScalar(-this.maxSpeed, this.maxSpeed);
+
+    // this.arrowHelperAcceleration.setDirection(this.acceleration.clone().normalize());
+    // this.arrowHelperVelocity.setDirection(this.velocity.clone().normalize());
+    // this.arrowHelperAcceleration.position.copy(this.vehicle.position);
+    // this.arrowHelperVelocity.position.copy(this.vehicle.position);
 
     this.vehicle.position.add(this.velocity);
     this.acceleration.multiplyScalar(0);
@@ -130,7 +152,6 @@ export default class SteeringBehaviour {
   }
 
   update() {
-    // this.seek(new THREE.Vector3(5, 0, 4));
     if (this.target.distanceTo(this.vehicle.position) > 0) this.seek(this.target);
     this.updateVehicle();
     this.draw();
