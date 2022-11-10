@@ -35,7 +35,7 @@ export default class Shaders {
 
     this.direction = new THREE.Vector3(0, -50, 0);
 
-    this.texture = new THREE.TextureLoader().load('/textures/dirt/color.jpg');
+    this.texture = new THREE.TextureLoader().load('/textures/dirt/healthbar.png');
 
     /**
      * Mouse
@@ -170,6 +170,12 @@ export default class Shaders {
       fragmentShader: fragmentShaderHealthBar,
       // blending: THREE.AdditiveBlending,
       uniforms: {
+        uTime: {
+          value: 0,
+        },
+        uTexture: {
+          value: this.texture,
+        },
         uAmountHealth: {
           value: this.debugObject.amountHealth,
         },
@@ -195,7 +201,7 @@ export default class Shaders {
   }
 
   update() {
-    // this.sphereMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
+    this.healthBarMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
     // console.log(this.experience.time.elapsed);
   }
 }
