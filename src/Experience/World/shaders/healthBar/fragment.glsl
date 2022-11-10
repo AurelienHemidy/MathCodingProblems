@@ -18,13 +18,13 @@ void main() {
 
     vec3 outputColor = Lerp(uStartColor, uEndColor, uAmountHealth);
 
-    // vec3 inverlerp = InverseLerp(0., uAmountHealth, outputColor);
+    vec3 inverlerp = InverseLerp(0.2, 0.8, outputColor);
 
     // vec3 test = step();
 
     vec3 iLerp = vec3(step(vUv.x, uAmountHealth));
 
-    iLerp *= outputColor;
+    iLerp *= inverlerp;
 
 
 
