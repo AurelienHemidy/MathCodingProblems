@@ -168,6 +168,7 @@ export default class Shaders {
     this.healthBarMaterial = new THREE.ShaderMaterial({
       vertexShader: vertexShaderHealthBar,
       fragmentShader: fragmentShaderHealthBar,
+      // blending: THREE.AdditiveBlending,
       uniforms: {
         uAmountHealth: {
           value: this.debugObject.amountHealth,
