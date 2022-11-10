@@ -3,7 +3,9 @@ import Experience from '../Experience.js';
 
 import vertexShader from './shaders/vertex.glsl';
 import fragmentShader from './shaders/fragment.glsl';
-import { Mesh } from 'three';
+
+import vertexShaderHealthBar from './shaders/healthBar/vertex.glsl';
+import fragmentShaderHealthBar from './shaders/healthBar/fragment.glsl';
 
 export default class Shaders {
   constructor() {
@@ -21,8 +23,9 @@ export default class Shaders {
     }
     this.debugObject = {
       circleScale: 1,
-      startColor: '#0000ff',
-      endColor: '#e7a0ad',
+      startColor: '#CE3800',
+      endColor: '#3BDE00',
+      amountHealth: 1,
       minRange: 0,
       maxRange: 1,
     };
@@ -39,8 +42,10 @@ export default class Shaders {
      */
     this.mouse = new THREE.Vector2();
 
-    this.setSphere();
-    this.setSecondSphere();
+    // this.setSphere();
+    // this.setSecondSphere();
+
+    this.setHealthBar();
 
     this.raycast();
   }
@@ -97,8 +102,32 @@ export default class Shaders {
   setSecondSphere() {
     this.geom = new THREE.SphereGeometry(0.8, 20, 20);
 
-    this.mat = new THREE.MeshBasicMaterial({
-      color: 0xff0000,
+    this.mat = new THREE.ShaderMaterial({
+      vertexShader: vertexShader,
+      fragmentShader: fragmentShader,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+      depthFunc: THREE.NeverDepth,
+      uniforms: {
+        uTime: {
+          value: 0,
+        },
+        uTexture: { value: this.texture },
+        uColorStart: {
+          value: new THREE.Color(this.debugObject.startColor),
+        },
+        uColorEnd: {
+          value: new THREE.Color(this.debugObject.endColor),
+        },
+        uMinRange: {
+          value: this.debugObject.minRange,
+        },
+        uMaxRange: {
+          value: this.debugObject.maxRange,
+        },
+      },
     });
 
     this.secondSphere = new Mesh(this.geom, this.mat);
@@ -134,8 +163,38 @@ export default class Shaders {
     // });
   }
 
+  setHealthBar() {
+    this.healthBarGeometry = new THREE.PlaneGeometry(5, 0.5, 10, 10);
+    this.healthBarMaterial = new THREE.ShaderMaterial({
+      vertexShader: vertexShaderHealthBar,
+      fragmentShader: fragmentShaderHealthBar,
+      uniforms: {
+        uAmountHealth: {
+          value: this.debugObject.amountHealth,
+        },
+        uStartColor: {
+          value: new THREE.Color(this.debugObject.startColor),
+        },
+        uEndColor: {
+          value: new THREE.Color(this.debugObject.endColor),
+        },
+      },
+    });
+
+    this.healthBar = new THREE.Mesh(this.healthBarGeometry, this.healthBarMaterial);
+
+    this.scene.add(this.healthBar);
+
+    this.debugFolder
+      .add(this.healthBarMaterial.uniforms.uAmountHealth, 'value')
+      .min(0)
+      .max(1)
+      .step(0.01)
+      .name('Health Amount');
+  }
+
   update() {
-    this.sphereMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
+    // this.sphereMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
     // console.log(this.experience.time.elapsed);
   }
 }
