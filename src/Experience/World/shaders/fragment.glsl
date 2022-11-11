@@ -24,9 +24,9 @@ float inverseLerpFloat(float a, float b, float v) {
 
 void main() {
 
-    // float t2 = clamp(inverseLerpFloat(uMinRange, uMaxRange, vUv.x), 0., 1.);
+    float t2 = clamp(inverseLerpFloat(uMinRange, uMaxRange, vUv.x), 0., 1.);
 
-    // vec3 outColor = lerp(uColorStart, uColorEnd, t2);
+    vec3 outColor = lerp(uColorStart, uColorEnd, t2);
 
     float yOffset = cos(vUv.x * TAU * 8.) * 0.01;
 
@@ -35,9 +35,13 @@ void main() {
     t *= 1. - vUv.y;
 
     t *= 1. - (abs(vNormal.y));
+    
+    // t *= outColor;
 
-    // vec3 outputColor = vec3(t);
+    vec3 gradient = mix(uColorStart, uColorEnd, vUv.y);
+
+    vec3 outputColor = vec3(t) * gradient;
 
     // gl_FragColor = vec4(1., 0., 0., 1.);
-    gl_FragColor = vec4(t, t, t, 1.);
+    gl_FragColor = vec4(outputColor, 1.);
 }

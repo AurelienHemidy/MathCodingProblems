@@ -7,6 +7,9 @@ import fragmentShader from './shaders/fragment.glsl';
 import vertexShaderHealthBar from './shaders/healthBar/vertex.glsl';
 import fragmentShaderHealthBar from './shaders/healthBar/fragment.glsl';
 
+import vertexShaderRipplesFromCenter from './shaders/ripplesFromCenter/vertex.glsl';
+import fragmentShaderRipplesFromCenter from './shaders/ripplesFromCenter/fragment.glsl';
+
 export default class Shaders {
   constructor() {
     this.experience = new Experience();
@@ -46,6 +49,7 @@ export default class Shaders {
     // this.setSecondSphere();
 
     this.setHealthBar();
+    // this.setRipplesFromCenter();
 
     this.raycast();
   }
@@ -169,6 +173,10 @@ export default class Shaders {
       vertexShader: vertexShaderHealthBar,
       fragmentShader: fragmentShaderHealthBar,
       // blending: THREE.AdditiveBlending,
+      blending: THREE.CustomBlending,
+      blendSrc: THREE.SrcAlphaFactor,
+      blendDst: THREE.OneMinusSrcAlphaFactor,
+      depthWrite: false,
       uniforms: {
         uTime: {
           value: 0,
@@ -200,8 +208,28 @@ export default class Shaders {
       .name('Health Amount');
   }
 
+  setRipplesFromCenter() {
+    this.ripplesFromCenterGeometry = new THREE.PlaneGeometry(5, 5, 10, 10);
+
+    this.ripplesFromCenterMaterial = new THREE.ShaderMaterial({
+      vertexShader: vertexShaderRipplesFromCenter,
+      fragmentShader: fragmentShaderRipplesFromCenter,
+      uniforms: {
+        uTime: {
+          value: 0,
+        },
+      },
+    });
+
+    this.ripplesFromCenter = new THREE.Mesh(this.ripplesFromCenterGeometry, this.ripplesFromCenterMaterial);
+
+    this.scene.add(this.ripplesFromCenter);
+  }
+
   update() {
     this.healthBarMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
+    // this.sphereMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
+    // this.ripplesFromCenterMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
     // console.log(this.experience.time.elapsed);
   }
 }

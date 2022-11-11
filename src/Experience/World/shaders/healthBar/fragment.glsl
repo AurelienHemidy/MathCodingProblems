@@ -17,23 +17,23 @@ void main() {
 
     // vec3 inverlerp = InverseLerp(0.2, 0.8, outputColor);
 
-    // vec3 iLerp = vec3(step(vUv.x, uAmountHealth));
+    // vec3 iLerp = vec3(step(vUv.x , uAmountHealth) );
 
-    // iLerp *= inverlerp;
+    // // iLerp *= inverlerp;
 
     
 
-    // gl_FragColor = vec4(iLerp, 1.);
+    // gl_FragColor = vec4(inverlerp, iLerp.x);
 
     // if(gl_FragColor.x < 0.001) discard;
 
     vec4 tex = texture2D(uTexture, vec2(uAmountHealth, vUv.y));
 
-    if (uAmountHealth < 0.2)tex *= cos(uTime);
+    if (uAmountHealth < 0.2)tex *= cos(uTime * 0.25) * 0.4 + 1.;
 
     vec3 iLerp = vec3(step(vUv.x, uAmountHealth));
 
-    iLerp *= tex.xyz;
+    iLerp *= tex.xyz ;
 
     gl_FragColor = vec4(iLerp, 1.);
 
