@@ -55,6 +55,7 @@ export default class CameraFollowPath {
 
     this.animation.actions.current = this.animation.actions.camera;
     this.animation.actions.current.clampWhenFinished = true;
+    this.animation.actions.current.loop = THREE.LoopPingPong;
 
     this.animation.actions.current.play();
     this.animation.actions.current.timeScale = 0;
@@ -75,6 +76,7 @@ export default class CameraFollowPath {
 
   setupEventListener() {
     window.addEventListener('wheel', (event) => {
+      console.log(this.animation.actions.camera.time);
       const signAnimationValue = Math.sign(event.deltaY);
 
       this.lerpValue += signAnimationValue * 0.1;
