@@ -10,6 +10,9 @@ import fragmentShaderHealthBar from './shaders/healthBar/fragment.glsl';
 import vertexShaderRipplesFromCenter from './shaders/ripplesFromCenter/vertex.glsl';
 import fragmentShaderRipplesFromCenter from './shaders/ripplesFromCenter/fragment.glsl';
 
+import vertexShaderTesting from './shaders/testing/vertex.glsl';
+import fragmentShaderTesting from './shaders/testing/fragment.glsl';
+
 export default class Shaders {
   constructor() {
     this.experience = new Experience();
@@ -48,10 +51,30 @@ export default class Shaders {
     // this.setSphere();
     // this.setSecondSphere();
 
-    this.setHealthBar();
+    // this.setHealthBar();
     // this.setRipplesFromCenter();
+    this.setPlane();
 
     this.raycast();
+  }
+
+  setPlane() {
+    this.planeGeometry = new THREE.PlaneGeometry(10, 10, 10, 10);
+    this.planeMaterial = new THREE.ShaderMaterial({
+      vertexShader: vertexShaderTesting,
+      fragmentShader: fragmentShaderTesting,
+      uniforms: {
+        uTime: {
+          value: 0,
+        },
+        uResolution: {
+          value: new THREE.Vector2(window.innerWidth, window.innerHeight),
+        },
+      },
+    });
+
+    this.plane = new THREE.Mesh(this.planeGeometry, this.planeMaterial);
+    this.scene.add(this.plane);
   }
 
   setSphere() {
@@ -227,8 +250,9 @@ export default class Shaders {
   }
 
   update() {
-    this.healthBarMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
+    // this.healthBarMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
     // this.sphereMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
+    this.planeMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
     // this.ripplesFromCenterMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
     // console.log(this.experience.time.elapsed);
   }

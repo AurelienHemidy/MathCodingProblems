@@ -1,6 +1,7 @@
 import Experience from '../Experience.js';
 import Helper from '../Helper.js';
 import CameraFollowPath from './CameraFollowPath.js';
+import ElementAroundSphere from './ElementAroundSphere.js';
 import Environment from './Environment.js';
 import Floor from './Floor.js';
 import Fox from './Fox.js';
@@ -23,11 +24,12 @@ export default class World {
     // this.localToWorld = new LocalToWord();
     // this.raycastPlaceElementOnSphere = new RaycastPlaceElementOnSphere();
     // this.steeringBehaviour = new SteeringBehaviour();
-    // this.shaders = new Shaders();
+    this.shaders = new Shaders();
+    // this.elementAroundSphere = new ElementAroundSphere();
 
     // Wait for resources
     this.resources.on('ready', () => {
-      this.cameraFollowPath = new CameraFollowPath();
+      // this.cameraFollowPath = new CameraFollowPath();
       // Setup
       // this.floor = new Floor()
       // this.fox = new Fox()
@@ -44,5 +46,6 @@ export default class World {
     if (this.steeringBehaviour) this.steeringBehaviour.update();
     if (this.shaders) this.shaders.update();
     if (this.cameraFollowPath) this.cameraFollowPath.update();
+    if (this.elementAroundSphere) this.elementAroundSphere.update();
   }
 }
