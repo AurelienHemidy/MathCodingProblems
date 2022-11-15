@@ -27,7 +27,7 @@ void main() {
     // // Paper that you have to explore with light on it ?
     // vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
-    // modelPosition.z = cos(proximity) * 0.2 + sin(proximity) * 0.2;
+    // modelPosition.z = cos(proximity) * 0.2 * + sin(proximity) * 0.2;
 
     // vec4 viewPosition = viewMatrix * modelPosition;
     // vec4 projectedPosition = projectionMatrix * viewPosition;

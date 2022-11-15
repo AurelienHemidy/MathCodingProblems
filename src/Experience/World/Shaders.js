@@ -34,6 +34,7 @@ export default class Shaders {
       amountHealth: 1,
       minRange: 0,
       maxRange: 1,
+      progress: 0,
     };
 
     this.objectsToTest = [];
@@ -43,10 +44,13 @@ export default class Shaders {
 
     this.texture = new THREE.TextureLoader().load('/textures/dirt/healthbar.png');
 
+    this.vel = new THREE.Vector2();
+
     /**
      * Mouse
      */
     this.mouse = new THREE.Vector2();
+    this.previousMouse = new THREE.Vector2();
 
     // this.setSphere();
     // this.setSecondSphere();
@@ -76,9 +80,22 @@ export default class Shaders {
           value: new THREE.Vector3(),
         },
         uTexture: {
-          value: new THREE.TextureLoader().load('/textures/dirt/text.jpg'),
+          value: new THREE.TextureLoader().load('/textures/dirt/buildings.jpg'),
+        },
+        uDisplacement: {
+          value: new THREE.TextureLoader().load('/textures/dirt/displacementmap.png'),
+        },
+        uVel: {
+          value: 0,
+        },
+        uProgress: {
+          value: 0,
         },
       },
+    });
+
+    this.debugFolder.add(this.debugObject, 'progress', 0, 1, 0.001).onChange((e) => {
+      this.planeMaterial.uniforms.uProgress.value = e;
     });
 
     this.plane = new THREE.Mesh(this.planeGeometry, this.planeMaterial);
@@ -178,7 +195,7 @@ export default class Shaders {
 
     // console.log(intersect[0]);
     if (intersect.length > 0) {
-      console.log(intersect[0].point);
+      // console.log(intersect[0].point);
 
       this.planeMaterial.uniforms.uMouse.value = intersect[0].point;
     }
@@ -193,8 +210,9 @@ export default class Shaders {
       // this.mouse.y = 1 - event.clientY / this.sizes.height;
 
       this.raycast();
-      // console.log(this.mouse);
-      // this.planeMaterial.uniforms.uMouse.value = new THREE.Vector2(this.mouse.x, this.mouse.y);
+
+      this.previousMouse.x = this.mouse.x;
+      this.previousMouse.y = this.mouse.y;
     });
 
     // window.addEventListener('mousemove', (event) => {
@@ -269,6 +287,7 @@ export default class Shaders {
     // this.healthBarMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
     // this.sphereMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
     this.planeMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
+
     // this.ripplesFromCenterMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
     // console.log(this.experience.time.elapsed);
   }
