@@ -60,10 +60,11 @@ export default class Shaders {
   }
 
   setPlane() {
-    this.planeGeometry = new THREE.PlaneGeometry(1, 1);
+    this.planeGeometry = new THREE.PlaneGeometry(1, 1, 100, 100);
     this.planeMaterial = new THREE.ShaderMaterial({
       vertexShader: vertexShaderTesting,
       fragmentShader: fragmentShaderTesting,
+      // wireframe: true,
       uniforms: {
         uTime: {
           value: 0,
@@ -75,7 +76,7 @@ export default class Shaders {
           value: new THREE.Vector3(),
         },
         uTexture: {
-          value: new THREE.TextureLoader().load('/textures/dirt/buildings.jpg'),
+          value: new THREE.TextureLoader().load('/textures/dirt/text.jpg'),
         },
       },
     });
