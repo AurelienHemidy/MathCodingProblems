@@ -55,11 +55,12 @@ export default class Shaders {
     // this.setRipplesFromCenter();
     this.setPlane();
 
+    this.setupEventListener();
     this.raycast();
   }
 
   setPlane() {
-    this.planeGeometry = new THREE.PlaneGeometry(10, 10, 10, 10);
+    this.planeGeometry = new THREE.PlaneGeometry(1, 1);
     this.planeMaterial = new THREE.ShaderMaterial({
       vertexShader: vertexShaderTesting,
       fragmentShader: fragmentShaderTesting,
@@ -70,11 +71,18 @@ export default class Shaders {
         uResolution: {
           value: new THREE.Vector2(window.innerWidth, window.innerHeight),
         },
+        uMouse: {
+          value: new THREE.Vector3(),
+        },
+        uTexture: {
+          value: new THREE.TextureLoader().load('/textures/dirt/buildings.jpg'),
+        },
       },
     });
 
     this.plane = new THREE.Mesh(this.planeGeometry, this.planeMaterial);
     this.scene.add(this.plane);
+    this.objectsToTest.push(this.plane);
   }
 
   setSphere() {
@@ -168,17 +176,24 @@ export default class Shaders {
     const intersect = this.raycaster.intersectObjects(this.objectsToTest);
 
     // console.log(intersect[0]);
-    if (intersect[0]) {
+    if (intersect.length > 0) {
+      console.log(intersect[0].point);
+
+      this.planeMaterial.uniforms.uMouse.value = intersect[0].point;
     }
   }
 
   setupEventListener() {
-    window.addEventListener('mousedown', (event) => {
+    window.addEventListener('mousemove', (event) => {
       this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
       this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
 
+      // this.mouse.x = event.clientX / this.sizes.width;
+      // this.mouse.y = 1 - event.clientY / this.sizes.height;
+
       this.raycast();
-      //   console.log(this.mouse);
+      // console.log(this.mouse);
+      // this.planeMaterial.uniforms.uMouse.value = new THREE.Vector2(this.mouse.x, this.mouse.y);
     });
 
     // window.addEventListener('mousemove', (event) => {
