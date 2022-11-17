@@ -17,26 +17,26 @@ float map(float value, float min1, float max1, float min2, float max2) {
 }
 
 void main() {
-    // vec2 directionFromMouse = normalize(vPosition.xy - uMouse.xy);
+    vec2 directionFromMouse = normalize(vPosition.xy - uMouse.xy);
 
-    // float distanceFromMouse = length(vPosition - uMouse);
+    float distanceFromMouse = length(vPosition - uMouse);
 
-    // float prox = clamp(1. - map( distanceFromMouse, 0., 0.2, 0.,1.), 0., 1.0);
+    float prox = clamp(1. - map( distanceFromMouse, 0., 0.2, 0.,1.), 0., 1.0);
 
-    // // color *= distanceMap;
+    // color *= distanceMap;
 
-    // // Some distortion on image with mouse
-    // vec2 zoomedUV = vUv + directionFromMouse * prox * 0.02;
+    // Some distortion on image with mouse
+    vec2 zoomedUV = vUv + directionFromMouse * prox * 0.02;
 
-    // // Zoomed on mouse
-    // vec2 zoomedUV1 = mix(vUv, uMouse.xy + vec2(0.5), prox* 0.3);
+    // Zoomed on mouse
+    vec2 zoomedUV1 = mix(vUv, uMouse.xy + vec2(0.5), prox* 0.3);
     
-    // vec4 color = texture2D(uTexture, zoomedUV1);
+    vec4 color = texture2D(uTexture, zoomedUV);
 
-    // gl_FragColor = vec4(color.xyz, 1.0);
+    gl_FragColor = vec4(color.xyz, 1.0);
 
-    // if (gl_FragColor.x < 0.0001) discard;
-    // gl_FragColor = color;
+    if (gl_FragColor.x < 0.0001) discard;
+    gl_FragColor = color;
 
     //===============================//
     //===============================//
@@ -45,22 +45,22 @@ void main() {
 
     // float proximity = clamp(1. - map( distanceFromMouse, 0., 1., 0.,1.), 0., 1.0);
 
-    vec4 displace = texture2D(uDisplacement, vUv.yx);
+    // vec4 displace = texture2D(uDisplacement, vUv.yx);
 
     
-    vec2 displaceUV = vec2(
-        vUv.x,
-        vUv.y 
-    );
+    // vec2 displaceUV = vec2(
+    //     vUv.x,
+    //     vUv.y 
+    // );
 
-    displaceUV.y = mix(vUv.y, displace.x - 0.2, uProgress);
+    // displaceUV.y = mix(vUv.y, displace.x - 0.2, uProgress);
 
     
-    vec4 color = texture2D(uTexture, displaceUV);
+    // vec4 color = texture2D(uTexture, vUv);
 
-    color.r = texture2D(uTexture, displaceUV + vec2(0., 0.02) * uProgress).r;
-    color.g = texture2D(uTexture, displaceUV + vec2(0., 0.07) * uProgress).g;
-    color.b = texture2D(uTexture, displaceUV + vec2(0., 0.09) * uProgress).b;
+    // color.r = texture2D(uTexture, displaceUV + vec2(0., 0.02) * uProgress).r;
+    // color.g = texture2D(uTexture, displaceUV + vec2(0., 0.07) * uProgress).g;
+    // color.b = texture2D(uTexture, displaceUV + vec2(0., 0.09) * uProgress).b;
 
 
     // displace += proximity * 0.7;
@@ -72,7 +72,7 @@ void main() {
 
 
 
-    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-    gl_FragColor = color;
+    // gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    // gl_FragColor = color;
     
 }

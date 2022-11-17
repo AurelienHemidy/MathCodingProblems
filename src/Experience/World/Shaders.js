@@ -13,6 +13,9 @@ import fragmentShaderRipplesFromCenter from './shaders/ripplesFromCenter/fragmen
 import vertexShaderTesting from './shaders/testing/vertex.glsl';
 import fragmentShaderTesting from './shaders/testing/fragment.glsl';
 
+import vertexShaderEarth from './shaders/earth/vertex.glsl';
+import fragmentShaderEarth from './shaders/earth/fragment.glsl';
+
 export default class Shaders {
   constructor() {
     this.experience = new Experience();
@@ -57,10 +60,11 @@ export default class Shaders {
 
     // this.setHealthBar();
     // this.setRipplesFromCenter();
-    this.setPlane();
+    // this.setPlane();
+    this.setEarth();
 
-    this.setupEventListener();
-    this.raycast();
+    // this.setupEventListener();
+    // this.raycast();
   }
 
   setPlane() {
@@ -69,6 +73,7 @@ export default class Shaders {
       vertexShader: vertexShaderTesting,
       fragmentShader: fragmentShaderTesting,
       // wireframe: true,
+      side: THREE.DoubleSide,
       uniforms: {
         uTime: {
           value: 0,
@@ -101,6 +106,29 @@ export default class Shaders {
     this.plane = new THREE.Mesh(this.planeGeometry, this.planeMaterial);
     this.scene.add(this.plane);
     this.objectsToTest.push(this.plane);
+  }
+
+  setEarth() {
+    this.earthGeometry = new THREE.PlaneGeometry(1, 1, 100, 100);
+    this.earthMaterial = new THREE.ShaderMaterial({
+      extensions: {
+        derivatives: '#extension GL_OES_standard_derivatives',
+        drawBuffers: true,
+      },
+      vertexShader: vertexShaderEarth,
+      fragmentShader: fragmentShaderEarth,
+      // wireframe: true,
+      uniforms: {
+        uTime: {
+          value: 0,
+        },
+      },
+    });
+
+    this.earth = new THREE.Mesh(this.earthGeometry, this.earthMaterial);
+
+    this.scene.add(this.earth);
+    console.log(this.scene);
   }
 
   setSphere() {
@@ -286,8 +314,8 @@ export default class Shaders {
   update() {
     // this.healthBarMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
     // this.sphereMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
-    this.planeMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
-
+    // this.planeMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
+    this.earthMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
     // this.ripplesFromCenterMaterial.uniforms.uTime.value = this.experience.time.elapsed * 0.01;
     // console.log(this.experience.time.elapsed);
   }
