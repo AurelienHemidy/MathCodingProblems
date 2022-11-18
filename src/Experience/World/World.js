@@ -7,6 +7,7 @@ import Floor from './Floor.js';
 import Fox from './Fox.js';
 import LocalToWord from './LocalToWorld.js';
 import LookAtTrigger from './LookAtTrigger.js';
+import PaperAngle from './PaperAngle.js';
 import PlaneDistortion from './PlaneDistortion.js';
 import RadialTrigger from './RadialTrigger.js';
 import RaycastPlaceElementOnSphere from './RaycastPlaceElementOnSphere.js';
@@ -26,7 +27,8 @@ export default class World {
     // this.raycastPlaceElementOnSphere = new RaycastPlaceElementOnSphere();
     // this.steeringBehaviour = new SteeringBehaviour();
     // this.shaders = new Shaders();
-    this.planeDistortion = new PlaneDistortion();
+    // this.planeDistortion = new PlaneDistortion();
+    this.paperAngle = new PaperAngle();
     // this.elementAroundSphere = new ElementAroundSphere();
 
     // Wait for resources
@@ -50,5 +52,6 @@ export default class World {
     if (this.cameraFollowPath) this.cameraFollowPath.update();
     if (this.elementAroundSphere) this.elementAroundSphere.update();
     if (this.planeDistortion) this.planeDistortion.update();
+    if (this.paperAngle) this.paperAngle.update();
   }
 }
