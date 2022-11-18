@@ -12,5 +12,5 @@ void main() {
 
     gl_FragColor = vec4(uProgress, 0.0, 0.0, 1.0);
     gl_FragColor = vec4(dist,0.0, 0.0, 1.0);
-    // gl_FragColor = color;
+    gl_FragColor = color;
 }

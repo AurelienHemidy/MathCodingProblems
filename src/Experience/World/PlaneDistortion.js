@@ -32,13 +32,16 @@ export default class PlaneDistortion {
   setObject() {
     this.planeGeometry = new THREE.PlaneGeometry(1, 1, 100, 100);
     this.planeMaterial = new THREE.ShaderMaterial({
-      wireframe: true,
+      // wireframe: true,
       uniforms: {
         uTime: {
           value: 0,
         },
         uProgress: {
           value: this.settings.progress,
+        },
+        uDirection: {
+          value: 0,
         },
         uTexture: {
           value: new THREE.TextureLoader().load('/textures/dirt/planeTex.jpg'),
@@ -69,6 +72,7 @@ export default class PlaneDistortion {
 
   mouseClickEvents() {
     window.addEventListener('mousedown', () => {
+      this.planeMaterial.uniforms.uDirection.value = 0;
       gsap.to(this.planeMaterial.uniforms.uProgress, {
         duration: 1,
         // ease: 'Power2.easeOut',
@@ -77,6 +81,7 @@ export default class PlaneDistortion {
     });
 
     window.addEventListener('mouseup', () => {
+      this.planeMaterial.uniforms.uDirection.value = 1;
       gsap.to(this.planeMaterial.uniforms.uProgress, {
         duration: 1,
         // ease: 'Power2.easeOut',

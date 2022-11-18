@@ -1,4 +1,5 @@
 uniform float uProgress;
+uniform float uDirection;
 
 varying vec2 vUv;
 
@@ -13,16 +14,21 @@ void main() {
 
     float normalizedDist = dist/maxDist;
 
+    float stickTo = normalizedDist;
+    float stickOut = -normalizedDist;
+
+    // Inverse the way based on direction
+    float stickEffect = mix(stickTo, stickOut, uDirection);
+
     float uProgress1 = min(2. * uProgress, 2. * (1. - uProgress));
 
-    float progressMove = clamp(2. * uProgress, 0., 1.0);
+    // Inverse the timing based on direction
+    float progressMove = mix(clamp(2. * uProgress, 0., 1.0), clamp(1. - 2.* (1. - uProgress), 0., 1.0), uDirection);
 
     float zOffset = 4.;
 
+    newPos.z +=  zOffset*(stickEffect * uProgress1 - progressMove);
 
-    newPos.z +=  zOffset*(normalizedDist * uProgress1 - progressMove);
-
-    // newPos.z -= 2. * progressMove;
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
 
