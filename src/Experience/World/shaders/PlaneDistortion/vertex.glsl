@@ -1,5 +1,6 @@
 uniform float uProgress;
 uniform float uDirection;
+uniform float uTime;
 
 varying vec2 vUv;
 
@@ -28,6 +29,8 @@ void main() {
     float zOffset = 4.;
 
     newPos.z +=  zOffset*(stickEffect * uProgress1 - progressMove);
+
+    newPos.z += uProgress * sin(dist * 10. + uTime) * 0.1;
 
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);

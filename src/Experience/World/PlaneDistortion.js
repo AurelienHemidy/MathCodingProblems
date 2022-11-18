@@ -23,10 +23,18 @@ export default class PlaneDistortion {
       progress: 0,
     };
 
+    this.mouse = new THREE.Vector2(0, 0);
+
+    this.prevMouse = new THREE.Vector2(0, 0);
+
+    this.speed = 0;
+    this.targetSpeed = 0;
+
     this.setObject();
     this.centerCameraOnPlane();
 
     this.mouseClickEvents();
+    this.mouseMoveEvent();
   }
 
   setObject() {
@@ -42,6 +50,15 @@ export default class PlaneDistortion {
         },
         uDirection: {
           value: 0,
+        },
+        uSpeed: {
+          value: 0,
+        },
+        uMouse: {
+          value: new THREE.Vector2(0, 0),
+        },
+        uResolution: {
+          value: new THREE.Vector4(0, 0, 0),
         },
         uTexture: {
           value: new THREE.TextureLoader().load('/textures/dirt/planeTex.jpg'),
@@ -91,10 +108,28 @@ export default class PlaneDistortion {
   }
 
   mouseMoveEvent() {
-    window.addEventListener('mousemove', () => {});
+    window.addEventListener('mousemove', (event) => {
+      this.mouse.x = event.clientX / this.sizes.width;
+      this.mouse.y = 1 - event.clientY / this.sizes.height;
+
+      this.planeMaterial.uniforms.uMouse.value = this.mouse;
+    });
+  }
+
+  getSpeed() {
+    this.speed = Math.sqrt((this.prevMouse.x - this.mouse.x) ** 2 + (this.prevMouse.y - this.mouse.y) ** 2);
+
+    this.targetSpeed += 0.1 * (this.speed - this.targetSpeed);
+
+    // console.log(this.speed);
+    this.planeMaterial.uniforms.uSpeed.value = this.targetSpeed;
+
+    this.prevMouse.x = this.mouse.x;
+    this.prevMouse.y = this.mouse.y;
   }
 
   update() {
     this.planeMaterial.uniforms.uTime.value = this.time.elapsed * 0.01;
+    this.getSpeed();
   }
 }
