@@ -33,6 +33,7 @@ export default class PaperAngle {
     this.raycaster = new THREE.Raycaster();
 
     this.setObject();
+    this.setRotationSphere();
     this.centerCameraOnPlane();
 
     this.mouseClickEvents();
@@ -57,6 +58,18 @@ export default class PaperAngle {
         uSpeed: {
           value: 0,
         },
+        uCenter: {
+          value: new THREE.Matrix4(),
+        },
+        uInvCenter: {
+          value: new THREE.Matrix4(),
+        },
+        uRange: {
+          value: 0.2,
+        },
+        uRadius: {
+          value: 0.05,
+        },
         uMouse: {
           value: new THREE.Vector2(0, 0),
         },
@@ -75,6 +88,23 @@ export default class PaperAngle {
     this.scene.add(this.plane);
 
     this.objectsToTest.push(this.plane);
+
+    this.debugFolder.add(this.planeMaterial.uniforms.uRadius, 'value', 0, 100, 0.01).name('radius');
+    this.debugFolder.add(this.planeMaterial.uniforms.uRange, 'value', 0, 300, 0.01).name('range');
+  }
+
+  setRotationSphere() {
+    this.rotationSphereGeom = new THREE.IcosahedronGeometry(0.1, 10);
+    this.rotationSphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ff00,
+    });
+
+    this.sphereRotation = new THREE.Mesh(this.rotationSphereGeom, this.rotationSphereMaterial);
+    this.scene.add(this.sphereRotation);
+
+    this.sphereRotation.position.z = 0.1;
+
+    this.sphereRotation.rotateOnAxis(new THREE.Vector3(-1, 0, 0), 1.5);
   }
 
   centerCameraOnPlane() {
@@ -99,7 +129,10 @@ export default class PaperAngle {
 
     // console.log(intersect[0]);
     if (intersect.length > 0) {
-      console.log(intersect[0]);
+      // console.log(intersect[0]);
+
+      this.sphereRotation.position.x = intersect[0].point.x;
+      this.sphereRotation.position.y = intersect[0].point.y;
 
       this.planeMaterial.uniforms.uMouse.value = intersect[0].uv;
     }
@@ -150,6 +183,15 @@ export default class PaperAngle {
 
   update() {
     this.planeMaterial.uniforms.uTime.value = this.time.elapsed * 0.01;
+
+    this.sphereRotation.updateMatrixWorld();
+
+    this.planeMaterial.uniforms.uCenter.value.multiplyMatrices(
+      this.camera.matrixWorldInverse,
+      this.sphereRotation.matrixWorld
+    );
+    // this.planeMaterial.uniforms.uInvCenter.value.getInverse(this.planeMaterial.uniforms.uCenter.value);
+    this.planeMaterial.uniforms.uInvCenter.value.copy(this.planeMaterial.uniforms.uCenter.value).invert();
     // this.getSpeed();
   }
 }
