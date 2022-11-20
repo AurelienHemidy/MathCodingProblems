@@ -11,6 +11,7 @@ import PaperAngle from './PaperAngle.js';
 import PlaneDistortion from './PlaneDistortion.js';
 import RadialTrigger from './RadialTrigger.js';
 import RaycastPlaceElementOnSphere from './RaycastPlaceElementOnSphere.js';
+import Ripples from './Ripples.js';
 import Shaders from './Shaders.js';
 import SteeringBehaviour from './SteeringBehaviour.js';
 
@@ -28,7 +29,8 @@ export default class World {
     // this.steeringBehaviour = new SteeringBehaviour();
     // this.shaders = new Shaders();
     // this.planeDistortion = new PlaneDistortion();
-    this.paperAngle = new PaperAngle();
+    // this.paperAngle = new PaperAngle();
+    this.ripples = new Ripples();
     // this.elementAroundSphere = new ElementAroundSphere();
 
     // Wait for resources
@@ -53,5 +55,6 @@ export default class World {
     if (this.elementAroundSphere) this.elementAroundSphere.update();
     if (this.planeDistortion) this.planeDistortion.update();
     if (this.paperAngle) this.paperAngle.update();
+    if (this.ripples) this.ripples.update();
   }
 }
