@@ -40,7 +40,23 @@ export default class Ripples {
   }
 
   setObject() {
-    this.planeGeometry = new THREE.PlaneGeometry(1, 1, 100, 100);
+    this.planeGeometry = new THREE.IcosahedronGeometry(0.5, 1);
+
+    this.icoGeom = new THREE.SphereGeometry(1, 10, 10);
+
+    let length = this.icoGeom.attributes.position.array.length;
+
+    let bary = [];
+
+    for (let i = 0; i < length; i++) {
+      bary.push(0, 0, 1, 0, 1, 0, 1, 0, 0);
+    }
+    let aBary = new Float32Array(bary);
+
+    this.icoGeom.setAttribute('aBary', new THREE.BufferAttribute(aBary, 3));
+
+    console.log(this.icoGeom);
+
     this.planeMaterial = new THREE.ShaderMaterial({
       //   wireframe: true,
       side: THREE.DoubleSide,
@@ -64,14 +80,14 @@ export default class Ripples {
           value: new THREE.Vector4(0, 0, 0),
         },
         uTexture: {
-          value: new THREE.TextureLoader().load('/textures/dirt/planeTex.jpg'),
+          value: new THREE.TextureLoader().load('/textures/dirt/stars.jpg'),
         },
       },
       vertexShader: vertexShader,
       fragmentShader: fragmentShader,
     });
 
-    this.plane = new THREE.Mesh(this.planeGeometry, this.planeMaterial);
+    this.plane = new THREE.Mesh(this.icoGeom, this.planeMaterial);
     this.scene.add(this.plane);
 
     this.objectsToTest.push(this.plane);
@@ -102,8 +118,8 @@ export default class Ripples {
 
     const intersect = this.raycaster.intersectObjects(this.objectsToTest);
 
-    // console.log(intersect[0]);
     if (intersect.length > 0) {
+      //   console.log(intersect[0].uv);
       this.planeMaterial.uniforms.uMouse.value = intersect[0].uv;
     }
   }
@@ -133,7 +149,7 @@ export default class Ripples {
       this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
       this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
 
-      this.planeMaterial.uniforms.uMouse.value = this.mouse;
+      //   this.planeMaterial.uniforms.uMouse.value = this.mouse;
 
       this.raycast();
     });
@@ -153,5 +169,10 @@ export default class Ripples {
 
   update() {
     this.planeMaterial.uniforms.uTime.value = this.time.elapsed * 0.01;
+    this.getSpeed();
+
+    this.plane.rotation.x = this.time.elapsed * 0.0001;
+    this.plane.rotation.y = this.time.elapsed * 0.0001;
+    // this.plane.rotation.y += this.time.elapsed * 0.001;
   }
 }
