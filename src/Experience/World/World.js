@@ -20,7 +20,7 @@ export default class World {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
-    this.helper = new Helper();
+    // this.helper = new Helper();
 
     // this.radialTrigger = new RadialTrigger();
     // this.lookAtTrigger = new LookAtTrigger();
