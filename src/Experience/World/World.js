@@ -14,6 +14,7 @@ import RaycastPlaceElementOnSphere from './RaycastPlaceElementOnSphere.js';
 import Ripples from './Ripples.js';
 import Shaders from './Shaders.js';
 import SteeringBehaviour from './SteeringBehaviour.js';
+import Water from './Water.js';
 
 export default class World {
   constructor() {
@@ -30,7 +31,8 @@ export default class World {
     // this.shaders = new Shaders();
     // this.planeDistortion = new PlaneDistortion();
     // this.paperAngle = new PaperAngle();
-    this.ripples = new Ripples();
+    // this.ripples = new Ripples();
+    this.water = new Water();
     // this.elementAroundSphere = new ElementAroundSphere();
 
     // Wait for resources
@@ -56,5 +58,6 @@ export default class World {
     if (this.planeDistortion) this.planeDistortion.update();
     if (this.paperAngle) this.paperAngle.update();
     if (this.ripples) this.ripples.update();
+    if (this.water) this.water.update();
   }
 }
