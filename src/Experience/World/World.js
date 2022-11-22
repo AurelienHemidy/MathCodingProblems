@@ -1,6 +1,7 @@
 import Experience from '../Experience.js';
 import Helper from '../Helper.js';
 import CameraFollowPath from './CameraFollowPath.js';
+import CameraScrolingBehaviour from './CameraScrollingBaguette25Alike.js';
 import ElementAroundSphere from './ElementAroundSphere.js';
 import Environment from './Environment.js';
 import Floor from './Floor.js';
@@ -32,7 +33,8 @@ export default class World {
     // this.planeDistortion = new PlaneDistortion();
     // this.paperAngle = new PaperAngle();
     // this.ripples = new Ripples();
-    this.water = new Water();
+    // this.water = new Water();
+    this.cameraScrolling = new CameraScrolingBehaviour();
     // this.elementAroundSphere = new ElementAroundSphere();
 
     // Wait for resources
@@ -59,5 +61,6 @@ export default class World {
     if (this.paperAngle) this.paperAngle.update();
     if (this.ripples) this.ripples.update();
     if (this.water) this.water.update();
+    if (this.cameraScrolling) this.cameraScrolling.update();
   }
 }

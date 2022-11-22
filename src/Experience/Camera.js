@@ -17,20 +17,22 @@ export default class Camera {
 
     this.settings = {
       enableOrbitControls: true,
+      checkCameraPosition: () => console.log(this.instance.position),
     };
 
     this.setInstance();
-    this.setControls();
+    // this.setControls();
   }
 
   setInstance() {
     this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100);
-    this.instance.position.set(0, 0, 10);
+    this.instance.position.set(0, 2.5, 4);
     this.scene.add(this.instance);
 
     this.debugFolder.add(this.instance.position, 'x', -10, 10, 0.01);
     this.debugFolder.add(this.instance.position, 'y', -10, 10, 0.01);
     this.debugFolder.add(this.instance.position, 'z', -10, 30, 0.01);
+    this.debugFolder.add(this.settings, 'checkCameraPosition');
   }
 
   setControls() {
@@ -48,6 +50,6 @@ export default class Camera {
   }
 
   update() {
-    this.controls.update();
+    if (this.controls) this.controls.update();
   }
 }

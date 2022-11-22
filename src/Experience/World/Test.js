@@ -71,7 +71,7 @@ export default class Test {
       fragmentShader: fragmentShader,
     });
 
-    this.plane = new THREE.Mesh(this.icoGeom, this.planeMaterial);
+    this.plane = new THREE.Mesh(this.planeGeometry, this.planeMaterial);
     this.scene.add(this.plane);
 
     this.objectsToTest.push(this.plane);
