@@ -28,20 +28,9 @@ export default class CameraScrolingBehaviour {
 
     this.mouse = new THREE.Vector2(0, 0);
     this.prevMouse = new THREE.Vector2(0, 0);
-    this.startDragPosition = new THREE.Vector2(0, 0);
 
-    this.cameraCenter = new THREE.Vector2(0, 2.5);
-    this.pointClicked = new THREE.Vector2(0, 0);
-
-    this.cameraTarget = new THREE.Vector3(-2, 2.5, 4);
-    // this.cameraTarget = new THREE.Vector3(2.5, 2.5, 4).copy(this.camera.position);
+    this.cameraTarget = new THREE.Vector3(0, 0, 0);
     this.roundedCameraTarget = new THREE.Vector3(this.camera.position.x, this.camera.position.y, 0);
-
-    this.lerpValueToBorderRight = 0;
-    this.lerpValueToBorderLeft = 0;
-
-    this.cameraMaxClamp = new THREE.Vector3(2, 2.5, 4);
-    this.cameraMinClamp = new THREE.Vector3(-2, -2.5, 4);
 
     this.speed = 0;
     this.targetSpeed = 0;
@@ -155,8 +144,6 @@ export default class CameraScrolingBehaviour {
     if (intersect.length > 0) {
       //   console.log(intersect[0]);
       this.planeMaterial.uniforms.uMouse.value = intersect[0].uv;
-      console.log(intersect[0]);
-      this.pointClicked.set(intersect[0].point.x, intersect[0].point.y);
     }
   }
 
@@ -164,28 +151,21 @@ export default class CameraScrolingBehaviour {
     window.addEventListener('mousedown', (event) => {
       this.isMouseDown = true;
 
-      //   this.cameraCenter.x = intersect[0];
-      this.cameraCenter.x = this.pointClicked.x;
-      //   this.cameraCenter.y = this.pointClicked.y;
-
       this.planeMaterial.uniforms.uDirection.value = 0;
       gsap.to(this.planeMaterial.uniforms.uProgress, {
         duration: 0.5,
         // ease: 'Power2.easeOut',
         value: 1,
       });
-      //   gsap.to(this.camera.position, {
-      //     duration: 1,
-      //     // ease: 'Power2.easeOut',
-      //     z: 5,
-      //   });
+      gsap.to(this.camera.position, {
+        duration: 1,
+        // ease: 'Power2.easeOut',
+        z: 5,
+      });
     });
 
     window.addEventListener('mouseup', (event) => {
       this.isMouseDown = false;
-
-      //   console.log();
-      //   console.log(this.camera.position.x);
 
       this.planeMaterial.uniforms.uDirection.value = 1;
       gsap.to(this.planeMaterial.uniforms.uProgress, {
@@ -193,11 +173,11 @@ export default class CameraScrolingBehaviour {
         // ease: 'Power2.easeOut',
         value: 0,
       });
-      //   gsap.to(this.camera.position, {
-      //     duration: 1,
-      //     // ease: 'Power2.easeOut',
-      //     z: 4,
-      //   });
+      gsap.to(this.camera.position, {
+        duration: 1,
+        // ease: 'Power2.easeOut',
+        z: 4,
+      });
     });
   }
 
@@ -207,21 +187,6 @@ export default class CameraScrolingBehaviour {
       this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
 
       if (this.isMouseDown) {
-        let dirX = Math.sign(this.prevMouse.x - this.mouse.x);
-        let dirY = Math.sign(this.prevMouse.y - this.mouse.y);
-
-        console.log(-this.mouse.x);
-
-        // Faire en sorte de que l'endroit ou est positionné la souris doit être l'endroit ou arrive la caméra
-        this.camera.position.x = this.cameraCenter.x - 2 * this.mouse.x;
-        // this.camera.position.y = this.cameraCenter.y + -1 * this.mouse.y;
-
-        console.log(this.mouse.x);
-
-        // console.log(this.camera.position.x);
-        // console.log(this.camera.position.y);
-
-        // this.cameraTarget.clamp(this.cameraMinClamp, this.cameraMaxClamp);
       }
 
       this.prevMouse.x = this.mouse.x;
@@ -248,15 +213,8 @@ export default class CameraScrolingBehaviour {
   update() {
     this.planeMaterial.uniforms.uTime.value = this.time.elapsed * 0.01;
 
-    // this.camera.position.lerp(new THREE.Vector3(this.cameraTarget.x, this.cameraTarget.y, this.camera.position.z), 0.8);
-
     // this.roundedCameraTarget = this.cameraTarget.clone().floor();
     // this.roundedCameraTarget.x -= 0.5;
-
-    // this.testCam.position.lerp(new THREE.Vector3(this.roundedCameraTarget.x, this.roundedCameraTarget.y, 0), 0.05);
-    // console.log(this.roundedCameraTarget);
-
-    // this.camera.position.lerp(this.roundedCameraTarget, 0.03);
 
     // this.getSpeed();
   }
