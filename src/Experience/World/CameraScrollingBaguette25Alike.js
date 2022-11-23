@@ -49,7 +49,7 @@ export default class CameraScrolingBehaviour {
   setBackground() {
     this.planeGeometry = new THREE.PlaneGeometry(5, 6, 5, 6);
     this.planeMaterial = new THREE.ShaderMaterial({
-      wireframe: true,
+      // wireframe: true,
       side: THREE.DoubleSide,
       uniforms: {
         uTime: {
@@ -71,7 +71,7 @@ export default class CameraScrolingBehaviour {
           value: new THREE.Vector4(0, 0, 0),
         },
         uTexture: {
-          value: new THREE.TextureLoader().load('/textures/dirt/stars.jpg'),
+          value: new THREE.TextureLoader().load('/textures/dirt/building_windows.jpg'),
         },
       },
       vertexShader: vertexShader,
@@ -81,13 +81,15 @@ export default class CameraScrolingBehaviour {
     this.plane = new THREE.Mesh(this.planeGeometry, this.planeMaterial);
     this.scene.add(this.plane);
 
+    this.debugFolder.add(this.plane.rotation, 'y', -Math.PI, Math.PI, 0.01);
+
     this.objectsToTest.push(this.plane);
   }
 
   setWindows() {
     this.windowGeom = new THREE.BoxGeometry(0.5, 0.5, 0.5);
     this.windowMaterial = new THREE.MeshBasicMaterial({
-      color: 0xff0000,
+      color: 0x808080,
     });
 
     this.windows = new THREE.InstancedMesh(this.windowGeom, this.windowMaterial, this.settings.numberOfWindows);
@@ -111,14 +113,6 @@ export default class CameraScrolingBehaviour {
     // this.objectsToTest.push(this.windows);
 
     this.windows.position.set(-2, 2.5, 0);
-
-    this.geo = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-    this.mat = new THREE.MeshBasicMaterial({
-      color: 0x00ff00,
-    });
-    this.testCam = new THREE.Mesh(this.geo, this.mat);
-    this.scene.add(this.testCam);
-    this.testCam.position.set(-2, 2.5, 0);
   }
 
   centerCameraOnPlane() {
@@ -157,10 +151,16 @@ export default class CameraScrolingBehaviour {
         // ease: 'Power2.easeOut',
         value: 1,
       });
+      gsap.to(this.plane.rotation, {
+        duration: 0.5,
+        // ease: 'Power2.easeOut',
+        y: 0,
+      });
+
       gsap.to(this.camera.position, {
         duration: 1,
-        // ease: 'Power2.easeOut',
-        z: 5,
+        ease: 'Power2.easeOut',
+        z: 6,
       });
     });
 
@@ -175,7 +175,7 @@ export default class CameraScrolingBehaviour {
       });
       gsap.to(this.camera.position, {
         duration: 1,
-        // ease: 'Power2.easeOut',
+        ease: 'Power2.easeOut',
         z: 4,
       });
     });
@@ -186,7 +186,15 @@ export default class CameraScrolingBehaviour {
       this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
       this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
 
-      if (this.isMouseDown) {
+      const rotation = (event.clientX / this.sizes.width) * 0.1 - 0.05;
+      console.log(rotation);
+
+      if (!this.isMouseDown) {
+        gsap.to(this.plane.rotation, {
+          duration: 1,
+          // ease: 'Power2.easeOut',
+          y: Math.PI * rotation,
+        });
       }
 
       this.prevMouse.x = this.mouse.x;
@@ -213,14 +221,13 @@ export default class CameraScrolingBehaviour {
   update() {
     this.planeMaterial.uniforms.uTime.value = this.time.elapsed * 0.01;
 
-    this.roundedCameraTarget = this.camera.position.clone().floor();
-    if (!this.isMouseDown)
+    this.roundedCameraTarget = this.camera.position.clone().round();
+    // this.roundedCameraTarget = new THREE.Vector3(this.camera.position.x );
+
+    if (this.speed < 0.002 && this.roundedCameraTarget.distanceTo(this.camera.position) < 0.5)
       this.camera.position.lerp(
-        new THREE.Vector3(this.roundedCameraTarget.x, this.roundedCameraTarget.y + 0.5, 0),
+        new THREE.Vector3(this.roundedCameraTarget.x, this.roundedCameraTarget.y + 0.5, 4),
         0.01
       );
-    // this.roundedCameraTarget.x -= 0.5;
-
-    // this.getSpeed();
   }
 }
