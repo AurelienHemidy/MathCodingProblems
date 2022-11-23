@@ -20,8 +20,11 @@ export default class Camera {
       checkCameraPosition: () => console.log(this.instance.position),
     };
 
+    this.cameraMaxClamp = new THREE.Vector3(2, 2.5, 5);
+    this.cameraMinClamp = new THREE.Vector3(-2, -2.5, 4);
+
     this.setInstance();
-    // this.setControls();
+    this.setControls();
   }
 
   setInstance() {
@@ -37,7 +40,16 @@ export default class Camera {
 
   setControls() {
     this.controls = new OrbitControls(this.instance, this.canvas);
+    this.controls.autoRotate = false;
+    this.controls.enableRotate = false;
+
     this.controls.enableDamping = true;
+    this.controls.minPolarAngle = 0;
+    this.controls.mouseButtons = {
+      LEFT: THREE.MOUSE.PAN,
+    };
+
+    this.controls.dampingFactor = 0.05;
 
     this.debugFolder
       .add(this.settings, 'enableOrbitControls')
@@ -51,5 +63,8 @@ export default class Camera {
 
   update() {
     if (this.controls) this.controls.update();
+
+    this.instance.position.clamp(this.cameraMinClamp, this.cameraMaxClamp);
+    this.instance.rotation.set(0, 0, 0);
   }
 }
