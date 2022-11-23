@@ -213,7 +213,12 @@ export default class CameraScrolingBehaviour {
   update() {
     this.planeMaterial.uniforms.uTime.value = this.time.elapsed * 0.01;
 
-    // this.roundedCameraTarget = this.cameraTarget.clone().floor();
+    this.roundedCameraTarget = this.camera.position.clone().floor();
+    if (!this.isMouseDown)
+      this.camera.position.lerp(
+        new THREE.Vector3(this.roundedCameraTarget.x, this.roundedCameraTarget.y + 0.5, 0),
+        0.01
+      );
     // this.roundedCameraTarget.x -= 0.5;
 
     // this.getSpeed();
