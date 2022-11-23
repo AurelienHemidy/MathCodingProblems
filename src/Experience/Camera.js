@@ -25,11 +25,12 @@ export default class Camera {
 
     this.setInstance();
     this.setControls();
+    // this.setGridCamera();
   }
 
   setInstance() {
     this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100);
-    this.instance.position.set(0, 2.5, 4);
+    this.instance.position.set(0, 0, 4);
     this.scene.add(this.instance);
 
     this.debugFolder.add(this.instance.position, 'x', -10, 10, 0.01);
@@ -40,6 +41,9 @@ export default class Camera {
 
   setControls() {
     this.controls = new OrbitControls(this.instance, this.canvas);
+  }
+
+  setGridCamera() {
     this.controls.autoRotate = false;
     this.controls.enableRotate = false;
     this.controls.enableZoom = false;
@@ -65,7 +69,7 @@ export default class Camera {
   update() {
     if (this.controls) this.controls.update();
 
-    this.instance.position.clamp(this.cameraMinClamp, this.cameraMaxClamp);
-    this.instance.rotation.set(0, 0, 0);
+    // this.instance.position.clamp(this.cameraMinClamp, this.cameraMaxClamp);
+    // this.instance.rotation.set(0, 0, 0);
   }
 }

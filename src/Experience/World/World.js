@@ -8,6 +8,7 @@ import Floor from './Floor.js';
 import Fox from './Fox.js';
 import LocalToWord from './LocalToWorld.js';
 import LookAtTrigger from './LookAtTrigger.js';
+import MirrorRenderTarget from './MirrorRenderTarget.js';
 import PaperAngle from './PaperAngle.js';
 import PlaneDistortion from './PlaneDistortion.js';
 import RadialTrigger from './RadialTrigger.js';
@@ -34,7 +35,8 @@ export default class World {
     // this.paperAngle = new PaperAngle();
     // this.ripples = new Ripples();
     // this.water = new Water();
-    this.cameraScrolling = new CameraScrolingBehaviour();
+    // this.cameraScrolling = new CameraScrolingBehaviour();
+    this.mirrorRenderTarget = new MirrorRenderTarget();
     // this.elementAroundSphere = new ElementAroundSphere();
 
     // Wait for resources
@@ -62,5 +64,6 @@ export default class World {
     if (this.ripples) this.ripples.update();
     if (this.water) this.water.update();
     if (this.cameraScrolling) this.cameraScrolling.update();
+    if (this.mirrorRenderTarget) this.mirrorRenderTarget.update();
   }
 }
