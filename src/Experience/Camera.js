@@ -16,7 +16,7 @@ export default class Camera {
     }
 
     this.settings = {
-      enableOrbitControls: true,
+      enableOrbitControls: false,
       checkCameraPosition: () => console.log(this.instance.position),
     };
 
@@ -41,6 +41,10 @@ export default class Camera {
 
   setControls() {
     this.controls = new OrbitControls(this.instance, this.canvas);
+    this.controls.enabled = false;
+    this.debugFolder
+      .add(this.settings, 'enableOrbitControls')
+      .onChange((isEnable) => (this.controls.enabled = isEnable));
   }
 
   setGridCamera() {
@@ -55,10 +59,6 @@ export default class Camera {
     };
 
     this.controls.dampingFactor = 0.05;
-
-    this.debugFolder
-      .add(this.settings, 'enableOrbitControls')
-      .onChange((isEnable) => (this.controls.enabled = isEnable));
   }
 
   resize() {

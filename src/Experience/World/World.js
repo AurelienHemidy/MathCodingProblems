@@ -16,6 +16,7 @@ import RaycastPlaceElementOnSphere from './RaycastPlaceElementOnSphere.js';
 import Ripples from './Ripples.js';
 import Shaders from './Shaders.js';
 import SteeringBehaviour from './SteeringBehaviour.js';
+import TrailTexture from './TrailTexture.js';
 import Water from './Water.js';
 
 export default class World {
@@ -36,7 +37,8 @@ export default class World {
     // this.ripples = new Ripples();
     // this.water = new Water();
     // this.cameraScrolling = new CameraScrolingBehaviour();
-    this.mirrorRenderTarget = new MirrorRenderTarget();
+    // this.mirrorRenderTarget = new MirrorRenderTarget();
+    this.trailTexture = new TrailTexture();
     // this.elementAroundSphere = new ElementAroundSphere();
 
     // Wait for resources
@@ -65,5 +67,6 @@ export default class World {
     if (this.water) this.water.update();
     if (this.cameraScrolling) this.cameraScrolling.update();
     if (this.mirrorRenderTarget) this.mirrorRenderTarget.update();
+    if (this.trailTexture) this.trailTexture.update();
   }
 }
