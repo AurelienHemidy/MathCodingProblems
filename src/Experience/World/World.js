@@ -9,6 +9,7 @@ import Fox from './Fox.js';
 import LocalToWord from './LocalToWorld.js';
 import LookAtTrigger from './LookAtTrigger.js';
 import MirrorRenderTarget from './MirrorRenderTarget.js';
+import ObjectSampling from './ObjectSampling.js';
 import PaperAngle from './PaperAngle.js';
 import PlaneDistortion from './PlaneDistortion.js';
 import RadialTrigger from './RadialTrigger.js';
@@ -38,11 +39,13 @@ export default class World {
     // this.water = new Water();
     // this.cameraScrolling = new CameraScrolingBehaviour();
     // this.mirrorRenderTarget = new MirrorRenderTarget();
-    this.trailTexture = new TrailTexture();
+    // this.trailTexture = new TrailTexture();
+
     // this.elementAroundSphere = new ElementAroundSphere();
 
     // Wait for resources
     this.resources.on('ready', () => {
+      this.objectSampling = new ObjectSampling();
       // this.cameraFollowPath = new CameraFollowPath();
       // Setup
       // this.floor = new Floor()
@@ -68,5 +71,6 @@ export default class World {
     if (this.cameraScrolling) this.cameraScrolling.update();
     if (this.mirrorRenderTarget) this.mirrorRenderTarget.update();
     if (this.trailTexture) this.trailTexture.update();
+    if (this.objectSampling) this.objectSampling.update();
   }
 }

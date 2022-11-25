@@ -22,8 +22,13 @@ export default [
     path: 'textures/dirt/normal.jpg',
   },
   {
-    name: 'cameraModel',
+    name: 'bookModel',
     type: 'gltfModel',
-    path: 'models/Camera/camera-followpath.gltf',
+    path: 'models/Book/book.gltf',
   },
+  // {
+  //   name: 'cameraModel',
+  //   type: 'gltfModel',
+  //   path: 'models/Camera/camera-followpath.gltf',
+  // },
 ];

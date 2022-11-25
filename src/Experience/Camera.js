@@ -16,7 +16,7 @@ export default class Camera {
     }
 
     this.settings = {
-      enableOrbitControls: false,
+      enableOrbitControls: true,
       checkCameraPosition: () => console.log(this.instance.position),
     };
 
@@ -30,7 +30,7 @@ export default class Camera {
 
   setInstance() {
     this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100);
-    this.instance.position.set(0, 0, 4);
+    this.instance.position.set(0, 0, 1);
     this.scene.add(this.instance);
 
     this.debugFolder.add(this.instance.position, 'x', -10, 10, 0.01);
@@ -41,7 +41,7 @@ export default class Camera {
 
   setControls() {
     this.controls = new OrbitControls(this.instance, this.canvas);
-    this.controls.enabled = false;
+    // this.controls.enabled = false;
     this.debugFolder
       .add(this.settings, 'enableOrbitControls')
       .onChange((isEnable) => (this.controls.enabled = isEnable));
