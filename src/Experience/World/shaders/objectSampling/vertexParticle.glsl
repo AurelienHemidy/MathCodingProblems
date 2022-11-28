@@ -56,7 +56,7 @@ void main() {
 
     newpos += normal * offset;
 
-    newpos += normal * noise * 0.1 * uProgress;
+    newpos += normal * noise * 0.5 * uProgress;
 
     // newpos += normal * offset * 10. * uProgress;
 
