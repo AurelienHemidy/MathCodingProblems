@@ -37,14 +37,14 @@ export default class World {
     // this.planeDistortion = new PlaneDistortion();
     // this.paperAngle = new PaperAngle();
     // this.ripples = new Ripples();
-    // this.water = new Water();
+    this.water = new Water();
     // this.cameraScrolling = new CameraScrolingBehaviour();
     // this.mirrorRenderTarget = new MirrorRenderTarget();
     // this.trailTexture = new TrailTexture();
 
     // this.elementAroundSphere = new ElementAroundSphere();
 
-    this.canvasTextureGenerator = new CanvasTextureGenerator();
+    // this.canvasTextureGenerator = new CanvasTextureGenerator();
 
     // Wait for resources
     this.resources.on('ready', () => {

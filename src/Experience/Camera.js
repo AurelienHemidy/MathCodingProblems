@@ -23,12 +23,13 @@ export default class Camera {
     this.cameraMaxClamp = new THREE.Vector3(2, 2.5, 5);
     this.cameraMinClamp = new THREE.Vector3(-2, -2.5, 4);
 
-    this.setInstance();
+    // this.setInstancePerspective();
+    this.setInstanceOrtho();
     this.setControls();
     // this.setGridCamera();
   }
 
-  setInstance() {
+  setInstancePerspective() {
     this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100);
     this.instance.position.set(0, 0, 1);
     this.scene.add(this.instance);
@@ -37,6 +38,20 @@ export default class Camera {
     this.debugFolder.add(this.instance.position, 'y', -10, 10, 0.01);
     this.debugFolder.add(this.instance.position, 'z', -10, 30, 0.01);
     this.debugFolder.add(this.settings, 'checkCameraPosition');
+  }
+
+  setInstanceOrtho() {
+    let frustrumSize = this.sizes.height;
+    let aspect = this.sizes.width / this.sizes.height;
+    this.instance = new THREE.OrthographicCamera(
+      (frustrumSize * aspect) / -2,
+      (frustrumSize * aspect) / 2,
+      frustrumSize / 2,
+      frustrumSize / -2,
+      -1000,
+      1000
+    );
+    this.instance.position.set(0, 0, 2);
   }
 
   setControls() {

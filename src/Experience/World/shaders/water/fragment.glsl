@@ -1,21 +1,21 @@
-uniform float uTime;
-uniform sampler2D uTexture;
+const float PI = 3.141592653589793;
+uniform vec2 uMouse;
 
-varying vec2 vUv; 
+varying vec2 vUv;
+uniform sampler2D uTexture;
+uniform sampler2D uDisplacement;
 
 void main() {
 
-    vec2 newUV = vUv;
+    vec4 disp = texture2D(uDisplacement, vUv);
+    
+    float theta = disp.r * 2. * PI;
 
-    newUV.x += sin(uTime * 0.2) * 0.01;
-    newUV.y += sin(uTime * 0.3) * 0.01;
+    vec2 dir = vec2(sin(theta), cos(theta));
 
-    vec4 tex = texture2D(uTexture, newUV);
+    vec2 uv = vUv + dir * disp.r * 0.1;
 
-    vec3 waterColor = vec3(0.0, 0.0, 0.5);
-
-    waterColor += tex.xyz;
-
-    gl_FragColor = vec4(tex.xyz, 1.);
-    // gl_FragColor = tex;
+    vec4 color = texture2D(uTexture, uv);
+    
+    gl_FragColor = color;
 }
