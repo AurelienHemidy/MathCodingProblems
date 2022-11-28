@@ -2,6 +2,7 @@ import Experience from '../Experience.js';
 import Helper from '../Helper.js';
 import CameraFollowPath from './CameraFollowPath.js';
 import CameraScrolingBehaviour from './CameraScrollingBaguette25Alike.js';
+import CanvasTextureGenerator from './CanvasTextureGenerator.js';
 import ElementAroundSphere from './ElementAroundSphere.js';
 import Environment from './Environment.js';
 import Floor from './Floor.js';
@@ -43,9 +44,11 @@ export default class World {
 
     // this.elementAroundSphere = new ElementAroundSphere();
 
+    this.canvasTextureGenerator = new CanvasTextureGenerator();
+
     // Wait for resources
     this.resources.on('ready', () => {
-      this.objectSampling = new ObjectSampling();
+      // this.objectSampling = new ObjectSampling();
       // this.cameraFollowPath = new CameraFollowPath();
       // Setup
       // this.floor = new Floor()
@@ -72,5 +75,6 @@ export default class World {
     if (this.mirrorRenderTarget) this.mirrorRenderTarget.update();
     if (this.trailTexture) this.trailTexture.update();
     if (this.objectSampling) this.objectSampling.update();
+    if (this.canvasTextureGenerator) this.canvasTextureGenerator.update();
   }
 }
