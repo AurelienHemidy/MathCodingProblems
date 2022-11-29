@@ -78,9 +78,9 @@ export default class Water {
   }
 
   setObject() {
-    this.planeGeometry = new THREE.PlaneGeometry(this.sizes.width, this.sizes.height, 100, 100);
+    this.planeGeometry = new THREE.PlaneGeometry(this.sizes.width, this.sizes.height, 1000, 1000);
     this.planeMaterial = new THREE.ShaderMaterial({
-      //   wireframe: true,
+      // wireframe: true,
       transparent: true,
       side: THREE.DoubleSide,
       uniforms: {
