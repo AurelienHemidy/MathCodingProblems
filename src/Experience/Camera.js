@@ -23,15 +23,15 @@ export default class Camera {
     this.cameraMaxClamp = new THREE.Vector3(2, 2.5, 5);
     this.cameraMinClamp = new THREE.Vector3(-2, -2.5, 4);
 
-    // this.setInstancePerspective();
-    this.setInstanceOrtho();
-    this.setControls();
+    this.setInstancePerspective();
+    // this.setInstanceOrtho();
+    // this.setControls();
     // this.setGridCamera();
   }
 
   setInstancePerspective() {
     this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100);
-    this.instance.position.set(0, 0, 1);
+    this.instance.position.set(0, 0, 10);
     this.scene.add(this.instance);
 
     this.debugFolder.add(this.instance.position, 'x', -10, 10, 0.01);

@@ -12,6 +12,7 @@ import LookAtTrigger from './LookAtTrigger.js';
 import MirrorRenderTarget from './MirrorRenderTarget.js';
 import ObjectSampling from './ObjectSampling.js';
 import PaperAngle from './PaperAngle.js';
+import PillarRotate from './PillarRotate.js';
 import PlaneDistortion from './PlaneDistortion.js';
 import RadialTrigger from './RadialTrigger.js';
 import RaycastPlaceElementOnSphere from './RaycastPlaceElementOnSphere.js';
@@ -37,7 +38,8 @@ export default class World {
     // this.planeDistortion = new PlaneDistortion();
     // this.paperAngle = new PaperAngle();
     // this.ripples = new Ripples();
-    this.water = new Water();
+    // this.water = new Water();
+    this.pillarRotate = new PillarRotate();
     // this.cameraScrolling = new CameraScrolingBehaviour();
     // this.mirrorRenderTarget = new MirrorRenderTarget();
     // this.trailTexture = new TrailTexture();
@@ -76,5 +78,6 @@ export default class World {
     if (this.trailTexture) this.trailTexture.update();
     if (this.objectSampling) this.objectSampling.update();
     if (this.canvasTextureGenerator) this.canvasTextureGenerator.update();
+    if (this.pillarRotate) this.pillarRotate.update();
   }
 }
