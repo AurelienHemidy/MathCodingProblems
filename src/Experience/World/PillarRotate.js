@@ -183,8 +183,11 @@ export default class PillarRotate {
       mesh.position.x = Math.sin(Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll) * 2;
       mesh.position.z = Math.cos(Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll) * 2;
       mesh.rotation.y = Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll;
+      //   if (i === 2) console.log(mesh.position.y);
     });
   }
+
+  // Arrondir au float le plus prhce d'un mutliple de 2.5
 
   update() {
     this.planeMaterial.uniforms.uTime.value = this.time.elapsed * 0.01;
