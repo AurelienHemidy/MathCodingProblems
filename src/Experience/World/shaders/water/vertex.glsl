@@ -4,6 +4,7 @@ varying vec2 vUv;
 varying vec3 vNormal;
 
 uniform sampler2D uDisplacement;
+uniform float uProgress;
 
 varying vec3 uPosition;
 
@@ -14,7 +15,7 @@ void main() {
 
     vec3 newpos = position;
 
-    newpos += disp.xyz * 20.;
+    newpos += disp.xyz * 20. * uProgress;
 
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(newpos, 1.0);

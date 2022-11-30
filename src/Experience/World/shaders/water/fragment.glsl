@@ -1,5 +1,6 @@
 const float PI = 3.141592653589793;
 uniform vec2 uMouse;
+uniform float uProgress;
 
 varying vec2 vUv;
 uniform sampler2D uTexture;
@@ -13,7 +14,7 @@ void main() {
 
     vec2 dir = vec2(sin(theta), cos(theta));
 
-    vec2 uv = vUv + dir * disp.r * 0.1;
+    vec2 uv = vUv + dir * disp.r * 0.1 * uProgress;
 
     vec4 color = texture2D(uTexture, uv);
     

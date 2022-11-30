@@ -151,7 +151,7 @@ export default class Water {
     window.addEventListener('mousedown', () => {
       // this.planeMaterial.uniforms.uDirection.value = 0;
       // gsap.to(this.planeMaterial.uniforms.uProgress, {
-      //   duration: 0.5,
+      //   duration: 1,
       //   // ease: 'Power2.easeOut',
       //   value: 1,
       // });
@@ -160,7 +160,7 @@ export default class Water {
     window.addEventListener('mouseup', () => {
       // this.planeMaterial.uniforms.uDirection.value = 1;
       // gsap.to(this.planeMaterial.uniforms.uProgress, {
-      //   duration: 0.5,
+      //   duration: 1,
       //   // ease: 'Power2.easeOut',
       //   value: 0,
       // });
@@ -210,6 +210,12 @@ export default class Water {
   }
 
   trackMousePos() {
+    this.speed = Math.sqrt((this.prevMouse.x - this.mouse.x) ** 2 + (this.prevMouse.y - this.mouse.y) ** 2);
+    this.targetSpeed += 0.01 * (this.speed - this.targetSpeed);
+    this.targetSpeed *= 0.9;
+    this.planeMaterial.uniforms.uProgress.value = Math.min(this.targetSpeed, 1);
+    console.log(this.targetSpeed);
+
     const isMouseNotMoving =
       Math.abs(this.mouse.x - this.prevMouse.x) < 4 && Math.abs(this.mouse.y - this.prevMouse.y) < 4;
 
