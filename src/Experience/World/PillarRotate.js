@@ -4,6 +4,7 @@ import gsap from 'gsap';
 
 import vertexShader from './shaders/pillarRotate/vertex.glsl';
 import fragmentShader from './shaders/pillarRotate/fragment.glsl';
+import { Vector3 } from 'three';
 
 export default class PillarRotate {
   constructor() {
@@ -15,7 +16,7 @@ export default class PillarRotate {
     this.sizes = this.experience.sizes;
     this.camera = this.experience.camera.instance;
 
-    this.numberOfImages = 5;
+    this.numberOfImages = 7;
 
     // Debug
     if (this.debug.active) {
@@ -24,6 +25,7 @@ export default class PillarRotate {
     this.settings = {
       progress: 0,
       move: 0,
+      isScroll: true,
     };
 
     this.mouse = new THREE.Vector2(0, 0);
@@ -44,6 +46,12 @@ export default class PillarRotate {
 
     this.mouseClickEvents();
     this.mouseMoveEvent();
+
+    // console.log(this.roundToMultiple(-16.5, 2.5));
+  }
+
+  roundToMultiple(number, mutliplier) {
+    return Math.round(number / mutliplier) * mutliplier;
   }
 
   setObject() {
@@ -88,10 +96,10 @@ export default class PillarRotate {
 
       //   mesh.position.x += 1.1 * i;
 
-      mesh.position.x = Math.sin(Math.PI * 2 * (i / this.numberOfImages) + this.settings.move) * 2;
-      mesh.position.z = Math.cos(Math.PI * 2 * (i / this.numberOfImages) + this.settings.move) * 2;
+      // mesh.position.x = Math.sin(Math.PI * 2 * (i / this.numberOfImages) + this.settings.move) * 2;
+      // mesh.position.z = Math.cos(Math.PI * 2 * (i / this.numberOfImages) + this.settings.move) * 2;
 
-      mesh.rotation.y += Math.PI * 2 * (i / this.numberOfImages);
+      // mesh.rotation.y += Math.PI * 2 * (i / this.numberOfImages);
     }
 
     this.debugFolder.add(this.settings, 'move', -5, 5, 0.01).onChange((e) => {
@@ -150,8 +158,10 @@ export default class PillarRotate {
     });
 
     document.addEventListener('mousewheel', (e) => {
+      // if (!this.settings.isScroll) return;
       this.scrollTarget += Math.sign(e.deltaY) * 0.1;
     });
+    // this.debugFolder.add(this.settings, 'isScroll');
   }
 
   mouseMoveEvent() {
@@ -179,15 +189,27 @@ export default class PillarRotate {
 
   updateMeshes() {
     this.meshes.forEach((mesh, i) => {
+      const stickPosition = this.roundToMultiple(mesh.position.y, ((Math.PI * 2) / this.numberOfImages) * 2);
+
+      let diff = stickPosition - mesh.position.y;
+
+      this.currentScroll += Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.0015;
+
       mesh.position.y = (-Math.PI * 2 * (i / this.numberOfImages) + this.currentScroll) * 2;
       mesh.position.x = Math.sin(Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll) * 2;
       mesh.position.z = Math.cos(Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll) * 2;
+
       mesh.rotation.y = Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll;
-      //   if (i === 2) console.log(mesh.position.y);
+
+      // Trying to make infinite scroll
+      // mesh.position.x = -Math.sin(Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll) * 4;
+      // mesh.position.z = -Math.cos(Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll) * 4;
+
+      // mesh.rotation.y = Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll;
+
+      // mesh.position.y = ((this.n * i - this.currentScroll + 42000 * this.wholeWidth) % this.wholeWidth) - this.n * 2;
     });
   }
-
-  // Arrondir au float le plus prhce d'un mutliple de 2.5
 
   update() {
     this.planeMaterial.uniforms.uTime.value = this.time.elapsed * 0.01;
