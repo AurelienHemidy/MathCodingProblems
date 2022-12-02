@@ -4,7 +4,6 @@ import gsap from 'gsap';
 
 import vertexShader from './shaders/pillarRotate/vertex.glsl';
 import fragmentShader from './shaders/pillarRotate/fragment.glsl';
-import { Vector3 } from 'three';
 
 export default class PillarRotate {
   constructor() {
@@ -55,7 +54,7 @@ export default class PillarRotate {
   }
 
   setObject() {
-    this.planeGeometry = new THREE.PlaneGeometry(2, 1);
+    this.planeGeometry = new THREE.PlaneGeometry(2, 1, 100, 100);
     this.planeMaterial = new THREE.ShaderMaterial({
       //   wireframe: true,
       side: THREE.DoubleSide,
@@ -70,6 +69,9 @@ export default class PillarRotate {
           value: 0,
         },
         uSpeed: {
+          value: 0,
+        },
+        uDiff: {
           value: 0,
         },
         uMouse: {
@@ -158,10 +160,10 @@ export default class PillarRotate {
     });
 
     document.addEventListener('mousewheel', (e) => {
-      // if (!this.settings.isScroll) return;
+      if (!this.settings.isScroll) return;
       this.scrollTarget += Math.sign(e.deltaY) * 0.1;
     });
-    // this.debugFolder.add(this.settings, 'isScroll');
+    this.debugFolder.add(this.settings, 'isScroll');
   }
 
   mouseMoveEvent() {
@@ -193,7 +195,11 @@ export default class PillarRotate {
 
       let diff = stickPosition - mesh.position.y;
 
-      this.currentScroll += Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.0015;
+      let diffEase = Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.0015;
+
+      this.currentScroll += diffEase;
+
+      this.planeMaterial.uniforms.uDiff.value = this.scroll;
 
       mesh.position.y = (-Math.PI * 2 * (i / this.numberOfImages) + this.currentScroll) * 2;
       mesh.position.x = Math.sin(Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll) * 2;
