@@ -24,7 +24,7 @@ export default class PillarRotate {
     this.settings = {
       progress: 0,
       move: 0,
-      isScroll: true,
+      isScroll: false,
     };
 
     this.mouse = new THREE.Vector2(0, 0);
@@ -40,6 +40,10 @@ export default class PillarRotate {
     this.objectsToTest = [];
     this.raycaster = new THREE.Raycaster();
 
+    // Resource
+    this.resource = this.resources.items.bookModel;
+
+    this.setModel();
     this.setObject();
     this.centerCameraOnPlane();
 
@@ -53,8 +57,25 @@ export default class PillarRotate {
     return Math.round(number / mutliplier) * mutliplier;
   }
 
+  setModel() {
+    this.model = this.resource.scene.children[0].children[0].children[0].children[0].children[0];
+
+    this.backgroundVersion = new THREE.Mesh(
+      this.model.geometry.clone(),
+      new THREE.MeshMatcapMaterial({
+        matcap: new THREE.TextureLoader().load('/textures/dirt/matcap3.jpg'),
+        color: 0x201e1e,
+      })
+    );
+
+    this.backgroundVersion.scale.set(7.5, 7.5, 7.5);
+    this.backgroundVersion.rotateOnAxis(new THREE.Vector3(1, 0, 0), -1.5);
+
+    this.scene.add(this.backgroundVersion);
+  }
+
   setObject() {
-    this.planeGeometry = new THREE.PlaneGeometry(2, 1, 100, 100);
+    this.planeGeometry = new THREE.PlaneGeometry(1, 1, 100, 100);
     this.planeMaterial = new THREE.ShaderMaterial({
       //   wireframe: true,
       side: THREE.DoubleSide,
@@ -81,7 +102,7 @@ export default class PillarRotate {
           value: new THREE.Vector4(0, 0, 0),
         },
         uTexture: {
-          value: new THREE.TextureLoader().load('/textures/dirt/stars.jpg'),
+          value: new THREE.TextureLoader().load('/textures/dirt/buildings.jpg'),
         },
       },
       vertexShader: vertexShader,
@@ -197,6 +218,8 @@ export default class PillarRotate {
 
       let diffEase = Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.0015;
 
+      this.backgroundVersion.rotation.z = Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll;
+
       this.currentScroll += diffEase;
 
       this.planeMaterial.uniforms.uDiff.value = this.scroll;
@@ -206,6 +229,7 @@ export default class PillarRotate {
       mesh.position.z = Math.cos(Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll) * 2;
 
       mesh.rotation.y = Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll;
+      console.log(this.backgroundVersion.rotation.z);
 
       // Trying to make infinite scroll
       // mesh.position.x = -Math.sin(Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll) * 4;

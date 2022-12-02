@@ -39,7 +39,7 @@ export default class World {
     // this.paperAngle = new PaperAngle();
     // this.ripples = new Ripples();
     // this.water = new Water();
-    this.pillarRotate = new PillarRotate();
+
     // this.cameraScrolling = new CameraScrolingBehaviour();
     // this.mirrorRenderTarget = new MirrorRenderTarget();
     // this.trailTexture = new TrailTexture();
@@ -50,6 +50,7 @@ export default class World {
 
     // Wait for resources
     this.resources.on('ready', () => {
+      this.pillarRotate = new PillarRotate();
       // this.objectSampling = new ObjectSampling();
       // this.cameraFollowPath = new CameraFollowPath();
       // Setup
