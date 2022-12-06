@@ -32,7 +32,8 @@ export default class Camera {
 
   setInstancePerspective() {
     this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100);
-    this.instance.position.set(0, 0, 10);
+    this.instance.position.set(0.028, 1.779, 3.537);
+
     this.scene.add(this.instance);
 
     this.debugFolder.add(this.instance.position, 'x', -10, 10, 0.01);

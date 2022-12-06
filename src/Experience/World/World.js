@@ -20,6 +20,7 @@ import Ripples from './Ripples.js';
 import Shaders from './Shaders.js';
 import SteeringBehaviour from './SteeringBehaviour.js';
 import TrailTexture from './TrailTexture.js';
+import Vinyl from './Vinyl.js';
 import Water from './Water.js';
 
 export default class World {
@@ -48,16 +49,17 @@ export default class World {
 
     // this.canvasTextureGenerator = new CanvasTextureGenerator();
 
-    this.pillarRotate = new PillarRotate();
+    // this.pillarRotate = new PillarRotate();
 
     // Wait for resources
     this.resources.on('ready', () => {
+      this.vinyl = new Vinyl();
       // this.objectSampling = new ObjectSampling();
       // this.cameraFollowPath = new CameraFollowPath();
       // Setup
       // this.floor = new Floor()
       // this.fox = new Fox()
-      // this.environment = new Environment()
+      this.environment = new Environment();
     });
   }
 
@@ -81,5 +83,6 @@ export default class World {
     if (this.objectSampling) this.objectSampling.update();
     if (this.canvasTextureGenerator) this.canvasTextureGenerator.update();
     if (this.pillarRotate) this.pillarRotate.update();
+    if (this.vinyl) this.vinyl.update();
   }
 }

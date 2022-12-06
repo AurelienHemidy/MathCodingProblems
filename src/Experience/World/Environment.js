@@ -14,17 +14,18 @@ export default class Environment {
     }
 
     this.setSunLight();
+    this.setGlobalLight();
     // this.setEnvironmentMap();
   }
 
   setSunLight() {
-    this.sunLight = new THREE.DirectionalLight('#ffffff', 4);
+    this.sunLight = new THREE.DirectionalLight('#ffffff', 2);
     this.sunLight.castShadow = true;
     this.sunLight.shadow.camera.far = 15;
     this.sunLight.shadow.mapSize.set(1024, 1024);
     this.sunLight.shadow.normalBias = 0.05;
     this.sunLight.position.set(3.5, 2, -1.25);
-    // this.scene.add(this.sunLight);
+    this.scene.add(this.sunLight);
 
     // Debug
     if (this.debug.active) {
@@ -36,6 +37,12 @@ export default class Environment {
 
       this.debugFolder.add(this.sunLight.position, 'z').name('sunLightZ').min(-5).max(5).step(0.001);
     }
+  }
+
+  setGlobalLight() {
+    this.globalLight = new THREE.AmbientLight(0xffffff, 2);
+
+    this.scene.add(this.globalLight);
   }
 
   setEnvironmentMap() {
