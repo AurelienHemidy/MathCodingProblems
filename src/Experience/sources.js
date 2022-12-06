@@ -21,10 +21,20 @@ export default [
     type: 'texture',
     path: 'textures/dirt/normal.jpg',
   },
+  // {
+  //   name: 'bookModel',
+  //   type: 'gltfModel',
+  //   path: 'models/Book/book.gltf',
+  // },
+  // {
+  //   name: 'herculesModel',
+  //   type: 'gltfModel',
+  //   path: 'models/Hercules/hercules.gltf',
+  // },
   {
-    name: 'bookModel',
+    name: 'towerModel',
     type: 'gltfModel',
-    path: 'models/Book/book.gltf',
+    path: 'models/Tower/tower.gltf',
   },
   // {
   //   name: 'cameraModel',

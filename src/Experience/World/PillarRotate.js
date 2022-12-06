@@ -36,14 +36,15 @@ export default class PillarRotate {
     this.scroll = 0;
     this.scrollTarget = 0;
     this.currentScroll = 0;
+    this.statueScroll = 0;
 
     this.objectsToTest = [];
     this.raycaster = new THREE.Raycaster();
 
     // Resource
-    this.resource = this.resources.items.bookModel;
+    this.resource = this.resources.items.towerModel;
 
-    this.setModel();
+    // this.setModel();
     this.setObject();
     this.centerCameraOnPlane();
 
@@ -58,20 +59,33 @@ export default class PillarRotate {
   }
 
   setModel() {
-    this.model = this.resource.scene.children[0].children[0].children[0].children[0].children[0];
+    this.model = this.resource.scene;
+    console.log(this.model);
 
-    this.backgroundVersion = new THREE.Mesh(
-      this.model.geometry.clone(),
-      new THREE.MeshMatcapMaterial({
-        matcap: new THREE.TextureLoader().load('/textures/dirt/matcap3.jpg'),
-        color: 0x201e1e,
-      })
-    );
+    // this.backgroundVersion = new THREE.Mesh(
+    //   this.model.geometry.clone(),
+    //   new THREE.MeshMatcapMaterial({
+    //     matcap: new THREE.TextureLoader().load('/textures/dirt/matcap3.jpg'),
+    //     color: 0x201e1e,
+    //   })
+    // );
 
-    this.backgroundVersion.scale.set(7.5, 7.5, 7.5);
-    this.backgroundVersion.rotateOnAxis(new THREE.Vector3(1, 0, 0), -1.5);
+    this.model.traverse((mesh) => {
+      if (mesh instanceof THREE.Mesh) {
+        mesh.material = new THREE.MeshMatcapMaterial({
+          matcap: new THREE.TextureLoader().load('/textures/dirt/matcap3.jpg'),
+          color: 0x201e1e,
+        });
+      }
+    });
 
-    this.scene.add(this.backgroundVersion);
+    this.model.scale.set(0.5, 0.5, 0.5);
+    this.model.position.y = -Math.PI * 4 + 2;
+    // // this.model.position.z = -1;
+    // // this.model.position.x = -1;
+    // // this.backgroundVersion.rotateOnAxis(new THREE.Vector3(1, 0, 0), -1.5);
+
+    this.scene.add(this.model);
   }
 
   setObject() {
@@ -218,18 +232,19 @@ export default class PillarRotate {
 
       let diffEase = Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.0015;
 
-      this.backgroundVersion.rotation.z = Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll;
+      // this.model.rotation.y = Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll;
+      // this.model.position.y = -Math.PI * 2 + -Math.PI * 2 * (i / this.numberOfImages) + this.currentScroll;
 
       this.currentScroll += diffEase;
 
-      this.planeMaterial.uniforms.uDiff.value = this.scroll;
+      this.planeMaterial.uniforms.uDiff.value = Math.abs(this.scroll);
 
       mesh.position.y = (-Math.PI * 2 * (i / this.numberOfImages) + this.currentScroll) * 2;
       mesh.position.x = Math.sin(Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll) * 2;
       mesh.position.z = Math.cos(Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll) * 2;
 
       mesh.rotation.y = Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll;
-      console.log(this.backgroundVersion.rotation.z);
+      // console.log(this.backgroundVersion.rotation.z);
 
       // Trying to make infinite scroll
       // mesh.position.x = -Math.sin(Math.PI * 2 * (i / this.numberOfImages) - this.currentScroll) * 4;
@@ -251,6 +266,7 @@ export default class PillarRotate {
     this.scrollTarget *= 0.9;
 
     this.currentScroll += this.scroll * 0.3;
+    this.statueScroll += this.scroll * 0.3;
 
     this.updateMeshes();
   }

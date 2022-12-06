@@ -48,9 +48,10 @@ export default class World {
 
     // this.canvasTextureGenerator = new CanvasTextureGenerator();
 
+    this.pillarRotate = new PillarRotate();
+
     // Wait for resources
     this.resources.on('ready', () => {
-      this.pillarRotate = new PillarRotate();
       // this.objectSampling = new ObjectSampling();
       // this.cameraFollowPath = new CameraFollowPath();
       // Setup
