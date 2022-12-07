@@ -15,7 +15,7 @@ export default class Environment {
 
     this.setSunLight();
     this.setGlobalLight();
-    // this.setEnvironmentMap();
+    this.setEnvironmentMap();
   }
 
   setSunLight() {
@@ -36,6 +36,7 @@ export default class Environment {
       this.debugFolder.add(this.sunLight.position, 'y').name('sunLightY').min(-5).max(5).step(0.001);
 
       this.debugFolder.add(this.sunLight.position, 'z').name('sunLightZ').min(-5).max(5).step(0.001);
+      this.debugFolder.close();
     }
   }
 

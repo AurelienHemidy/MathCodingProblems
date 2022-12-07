@@ -35,7 +35,7 @@ export default class World {
     // this.lookAtTrigger = new LookAtTrigger();
     // this.localToWorld = new LocalToWord();
     // this.raycastPlaceElementOnSphere = new RaycastPlaceElementOnSphere();
-    this.steeringBehaviour = new SteeringBehaviour();
+    // this.steeringBehaviour = new SteeringBehaviour();
     // this.shaders = new Shaders();
     // this.planeDistortion = new PlaneDistortion();
     // this.paperAngle = new PaperAngle();
@@ -43,7 +43,7 @@ export default class World {
     // this.water = new Water();
 
     // this.cameraScrolling = new CameraScrolingBehaviour();
-    // this.mirrorRenderTarget = new MirrorRenderTarget();
+    this.mirrorRenderTarget = new MirrorRenderTarget();
     // this.trailTexture = new TrailTexture();
 
     // this.elementAroundSphere = new ElementAroundSphere();

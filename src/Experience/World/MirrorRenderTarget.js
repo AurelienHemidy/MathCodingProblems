@@ -36,6 +36,7 @@ export default class MirrorRenderTarget {
     this.setObject();
     this.centerCameraOnPlane();
     this.setSecondScene();
+    this.setBackground();
 
     this.mouseClickEvents();
     this.mouseMoveEvent();
@@ -53,15 +54,30 @@ export default class MirrorRenderTarget {
     this.rtCamera = new THREE.PerspectiveCamera(this.rtFov, this.rtAspect, this.rtNear, this.rtFar);
 
     this.scene.add(this.rtCamera);
+
+    this.rtCamera.lookAt(this.mesh.position);
     // this.rtCamera.position.z = 3;
-    this.rtCamera.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI);
+    // this.rtCamera.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI);
 
     this.cameraHelper = new THREE.CameraHelper(this.rtCamera);
     // this.scene.add(this.cameraHelper);
   }
 
+  setBackground() {
+    this.planeGeometry2 = new THREE.PlaneGeometry(10, 5);
+    this.planeMaterial2 = new THREE.MeshBasicMaterial({
+      map: new THREE.TextureLoader().load('/textures/dirt/stars.jpg'),
+    });
+
+    this.plane2 = new THREE.Mesh(this.planeGeometry2, this.planeMaterial2);
+
+    this.plane2.position.z = -5;
+    this.plane2.position.y = 2.5;
+    this.scene.add(this.plane2);
+  }
+
   setObject() {
-    this.planeGeometry = new THREE.PlaneGeometry(1, 1);
+    this.planeGeometry = new THREE.PlaneGeometry(20, 20, 100, 100);
     this.planeMaterial = new THREE.ShaderMaterial({
       //   wireframe: true,
       side: THREE.DoubleSide,
@@ -85,7 +101,10 @@ export default class MirrorRenderTarget {
           value: new THREE.Vector4(0, 0, 0),
         },
         uTexture: {
-          value: new THREE.TextureLoader().load('/textures/dirt/stars.jpg'),
+          value: new THREE.TextureLoader().load('/textures/dirt/water.jpg'),
+        },
+        uDisplacement: {
+          value: new THREE.TextureLoader().load('/textures/dirt/water3.jpg'),
         },
       },
       vertexShader: vertexShader,
@@ -95,17 +114,21 @@ export default class MirrorRenderTarget {
     this.plane = new THREE.Mesh(this.planeGeometry, this.planeMaterial);
     this.scene.add(this.plane);
 
+    this.plane.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
+
     this.objectsToTest.push(this.plane);
 
-    const geom = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+    const geom = new THREE.SphereGeometry(0.5, 50, 50);
     const mat = new THREE.MeshBasicMaterial({
-      color: 0xff00ff,
+      map: new THREE.TextureLoader().load('/textures/dirt/water.jpg'),
     });
     this.mesh = new THREE.Mesh(geom, mat);
-    this.mesh.position.z = 6;
+    this.mesh.position.z = -3;
+    this.mesh.position.y = 1;
     this.scene.add(this.mesh);
 
     this.debugFolder.add(this.mesh.position, 'x', -2, 2, 0.01).name('mirrorMeshX');
+    this.debugFolder.add(this.mesh.position, 'y', -2, 2, 0.01).name('mirrorMeshX');
   }
 
   centerCameraOnPlane() {
@@ -186,8 +209,8 @@ export default class MirrorRenderTarget {
     this.renderer.setRenderTarget(null);
     this.planeMaterial.uniforms.uTexture.value = this.renderTarget.texture;
 
-    this.mesh.rotation.x = this.time.elapsed * 0.001;
-    this.mesh.rotation.y = this.time.elapsed * 0.001;
+    this.mesh.rotation.x = this.time.elapsed * 0.0001;
+    this.mesh.rotation.y = this.time.elapsed * 0.0001;
 
     this.cameraHelper.update();
   }

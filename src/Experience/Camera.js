@@ -40,6 +40,8 @@ export default class Camera {
     this.debugFolder.add(this.instance.position, 'y', -10, 10, 0.01);
     this.debugFolder.add(this.instance.position, 'z', -10, 30, 0.01);
     this.debugFolder.add(this.settings, 'checkCameraPosition');
+
+    this.debugFolder.close();
   }
 
   setInstanceOrtho() {
