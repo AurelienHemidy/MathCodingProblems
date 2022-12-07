@@ -1,6 +1,7 @@
 uniform vec2 uMouse;
 uniform float uProgress;
 uniform float uTime;
+uniform float uAbove;
 
 varying vec2 vUv;
 varying vec3 vNormal;
@@ -32,7 +33,12 @@ void main() {
     float distStep = smoothstep(0.5, 0., distanceFromMouse);
     float centeredLength = step( 0.2, length( vUv - vec2(0.5)) / 2.); 
 
-    distStep *= centeredLength;
+    // distStep *= centeredLength;
+
+    float testDist = smoothstep(0.5, 0., length(uv - vec2(1., 0.5)));
+
+    // float distTest = smoothstep(0.3, .5, length(vUv - vec2(0.5)));
+    float distTest = smoothstep(0.8, 1.0, uv.x) + smoothstep(0.8, 1.0, uv.y);
 
     // clamp(distStep, 0., 1.0);
 
@@ -50,9 +56,9 @@ void main() {
 
     vec3 newPos = position;
 
-    newPos.z += newZ * distStep;
 
-    newPos.x += newX * distStep;
+    // newPos.y -= distTest * 0.2;
+    // newPos.y -= clamp(log(distStep * length(uMouse - vec2(0.5))), -0.1, 0.0);
 
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);

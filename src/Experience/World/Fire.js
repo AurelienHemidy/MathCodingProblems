@@ -2,10 +2,10 @@ import * as THREE from 'three';
 import Experience from '../Experience.js';
 import gsap from 'gsap';
 
-import vertexShader from './shaders/paperAngle/vertex.glsl';
-import fragmentShader from './shaders/paperAngle/fragment.glsl';
+import vertexShader from './shaders/fire/vertex.glsl';
+import fragmentShader from './shaders/fire/fragment.glsl';
 
-export default class PaperAngle {
+export default class Fire {
   constructor() {
     this.experience = new Experience();
     this.scene = this.experience.scene;
@@ -17,7 +17,7 @@ export default class PaperAngle {
 
     // Debug
     if (this.debug.active) {
-      this.debugFolder = this.debug.ui.addFolder('PaperAngle');
+      this.debugFolder = this.debug.ui.addFolder('Fire');
     }
     this.settings = {
       progress: 0,
@@ -40,7 +40,7 @@ export default class PaperAngle {
   }
 
   setObject() {
-    this.planeGeometry = new THREE.PlaneGeometry(1, 1, 100, 100);
+    this.planeGeometry = new THREE.PlaneGeometry(1, 1);
     this.planeMaterial = new THREE.ShaderMaterial({
       //   wireframe: true,
       side: THREE.DoubleSide,
@@ -61,13 +61,10 @@ export default class PaperAngle {
           value: new THREE.Vector2(0, 0),
         },
         uResolution: {
-          value: new THREE.Vector4(0, 0, 0),
+          value: new THREE.Vector4(this.sizes.width, this.sizes.height, 0),
         },
         uTexture: {
-          value: new THREE.TextureLoader().load('/textures/dirt/planeTex.jpg'),
-        },
-        uAbove: {
-          value: 0,
+          value: new THREE.TextureLoader().load('/textures/dirt/curtains.png'),
         },
       },
       vertexShader: vertexShader,
@@ -78,41 +75,19 @@ export default class PaperAngle {
     this.scene.add(this.plane);
 
     this.objectsToTest.push(this.plane);
-
-    // this.plane.rotation.x = -1.55;
-
-    // this.debugFolder.add(this.planeMaterial.uniforms.uRadius, 'value', 0, 100, 0.01).name('radius');
-    // this.debugFolder.add(this.planeMaterial.uniforms.uRange, 'value', 0, 300, 0.01).name('range');
-  }
-
-  setRotationSphere() {
-    // this.rotationSphereGeom = new THREE.IcosahedronGeometry(0.1, 10);
-    this.rotationSphereGeom = new THREE.BoxGeometry(0.1, 0.1, 0.1);
-    this.rotationSphereMaterial = new THREE.MeshBasicMaterial({
-      color: 0x00ff00,
-    });
-
-    this.sphereRotation = new THREE.Mesh(this.rotationSphereGeom, this.rotationSphereMaterial);
-    this.scene.add(this.sphereRotation);
-
-    this.sphereRotation.position.z = 0.1;
-
-    this.sphereRotation.rotateOnAxis(new THREE.Vector3(-1, 0, 0), 1);
-    // this.sphereRotation.rotateOnAxis(new THREE.Vector3(0, 0, 1), 1.5);
-    // this.sphereRotation.lookAt(new THREE.Vector3(0, 0, 0.1));
   }
 
   centerCameraOnPlane() {
     const cameraDist = this.camera.position.z;
-    const height = 2;
+    const height = 1;
 
     this.camera.fov = 2 * (180 / Math.PI) * Math.atan(height / (cameraDist * 2));
 
-    // if (this.sizes.width / this.sizes.height > 1) {
-    //   this.plane.scale.x = this.camera.aspect;
-    // } else {
-    //   this.plane.scale.y = 1 / this.camera.aspect;
-    // }
+    if (this.sizes.width / this.sizes.height > 1) {
+      this.plane.scale.x = this.camera.aspect;
+    } else {
+      this.plane.scale.y = 1 / this.camera.aspect;
+    }
 
     this.camera.updateProjectionMatrix();
   }
@@ -122,20 +97,8 @@ export default class PaperAngle {
 
     const intersect = this.raycaster.intersectObjects(this.objectsToTest);
 
-    // console.log(intersect[0]);
     if (intersect.length > 0) {
-      gsap.to(this.planeMaterial.uniforms.uAbove, {
-        duration: 1.5,
-        // ease: 'Power2.easeOut',
-        value: 0.5,
-      });
       this.planeMaterial.uniforms.uMouse.value = intersect[0].uv;
-    } else {
-      gsap.to(this.planeMaterial.uniforms.uAbove, {
-        duration: 1.5,
-        // ease: 'Power2.easeOut',
-        value: 0,
-      });
     }
   }
 
@@ -143,8 +106,8 @@ export default class PaperAngle {
     window.addEventListener('mousedown', () => {
       this.planeMaterial.uniforms.uDirection.value = 0;
       gsap.to(this.planeMaterial.uniforms.uProgress, {
-        duration: 0.5,
-        // ease: 'Power2.easeOut',
+        duration: 1.5,
+        ease: 'Power2.easeOut',
         value: 1,
       });
     });
@@ -152,8 +115,8 @@ export default class PaperAngle {
     window.addEventListener('mouseup', () => {
       this.planeMaterial.uniforms.uDirection.value = 1;
       gsap.to(this.planeMaterial.uniforms.uProgress, {
-        duration: 0.5,
-        // ease: 'Power2.easeOut',
+        duration: 1.5,
+        ease: 'Power2.easeOut',
         value: 0,
       });
     });
@@ -164,7 +127,7 @@ export default class PaperAngle {
       this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
       this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
 
-      // this.planeMaterial.uniforms.uMouse.value = this.mouse;
+      //   this.planeMaterial.uniforms.uMouse.value = this.mouse;
 
       this.raycast();
     });
@@ -185,5 +148,6 @@ export default class PaperAngle {
   update() {
     this.planeMaterial.uniforms.uTime.value = this.time.elapsed * 0.01;
     this.getSpeed();
+    // console.log(this.planeMaterial.uniforms.uProgress.value);
   }
 }

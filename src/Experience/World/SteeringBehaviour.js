@@ -22,7 +22,7 @@ export default class SteeringBehaviour {
     this.objectsToTest = [];
     this.raycaster = new THREE.Raycaster();
 
-    this.direction = new THREE.Vector3(0, -50, 0);
+    this.direction = new THREE.Vector3(0, -5, 0);
 
     /**
      * Mouse

@@ -5,6 +5,7 @@ import CameraScrolingBehaviour from './CameraScrollingBaguette25Alike.js';
 import CanvasTextureGenerator from './CanvasTextureGenerator.js';
 import ElementAroundSphere from './ElementAroundSphere.js';
 import Environment from './Environment.js';
+import Fire from './Fire.js';
 import Floor from './Floor.js';
 import Fox from './Fox.js';
 import LocalToWord from './LocalToWorld.js';
@@ -34,7 +35,7 @@ export default class World {
     // this.lookAtTrigger = new LookAtTrigger();
     // this.localToWorld = new LocalToWord();
     // this.raycastPlaceElementOnSphere = new RaycastPlaceElementOnSphere();
-    // this.steeringBehaviour = new SteeringBehaviour();
+    this.steeringBehaviour = new SteeringBehaviour();
     // this.shaders = new Shaders();
     // this.planeDistortion = new PlaneDistortion();
     // this.paperAngle = new PaperAngle();
@@ -51,9 +52,11 @@ export default class World {
 
     // this.pillarRotate = new PillarRotate();
 
+    // this.fire = new Fire();
+
     // Wait for resources
     this.resources.on('ready', () => {
-      this.vinyl = new Vinyl();
+      // this.vinyl = new Vinyl();
       // this.objectSampling = new ObjectSampling();
       // this.cameraFollowPath = new CameraFollowPath();
       // Setup
@@ -84,5 +87,6 @@ export default class World {
     if (this.canvasTextureGenerator) this.canvasTextureGenerator.update();
     if (this.pillarRotate) this.pillarRotate.update();
     if (this.vinyl) this.vinyl.update();
+    if (this.fire) this.fire.update();
   }
 }

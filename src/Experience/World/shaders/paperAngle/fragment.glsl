@@ -1,4 +1,6 @@
 uniform vec2 uMouse;
+uniform sampler2D uTexture;
+uniform float uSpeed;
 
 varying vec2 vUv;
 varying vec3 vNormal;
@@ -22,7 +24,11 @@ void main() {
     
     float centeredLength = step( 0.2, length( vUv - vec2(0.5)) / 2.); 
 
-    distStep *= centeredLength;
+    float distTest = smoothstep(0.3, .5, length(vUv - vec2(0.5)));
+
+    float distTest2 = smoothstep(0.8, 1.0, vUv.x) + smoothstep(0.8, 1.0, vUv.y);
+
+    // distStep *= centeredLength;
 
     // float newColor = smoothstep(0.8, 1., vUv.x) + smoothstep(0.8, 1., 1. - vUv.x) + smoothstep(0.8, 1., vUv.y) + smoothstep(0.8, 1., 1. - vUv.y);
     // float newColor = ;
@@ -34,6 +40,10 @@ void main() {
     gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
     // gl_FragColor = vec4(vUv.x, vUv.x, vUv.x, 1.0);
     gl_FragColor = vec4(vUv, 1.0, 1.0);
+    gl_FragColor = texture2D(uTexture, vUv);
+
+    vec2 newuv = vec2(vUv.x - vUv.y);
+    gl_FragColor = vec4(distTest2,distTest2,distTest2, 1.);
     // gl_FragColor = vec4(newColor, newColor, newColor, 1.0);
     // gl_FragColor = vec4(corner, corner, corner, 1.0);
     // gl_FragColor = vec4(distStep, distStep, distStep, 1.0);
