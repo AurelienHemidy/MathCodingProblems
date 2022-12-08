@@ -34,50 +34,57 @@ export default class MirrorRenderTarget {
     this.raycaster = new THREE.Raycaster();
 
     this.setObject();
-    this.centerCameraOnPlane();
     this.setSecondScene();
     this.setBackground();
+    // this.centerCameraOnPlane();
 
     this.mouseClickEvents();
     this.mouseMoveEvent();
   }
 
   setSecondScene() {
-    this.rtWidth = 512;
-    this.rtHeight = 512;
+    this.rtWidth = 1024;
+    this.rtHeight = 1024;
     this.renderTarget = new THREE.WebGLRenderTarget(this.rtWidth, this.rtHeight);
 
-    this.rtFov = 75;
+    this.rtFov = 53.29;
     this.rtAspect = this.rtWidth / this.rtHeight;
-    this.rtNear = 0.1;
-    this.rtFar = 10;
+    this.rtNear = 0.2;
+    this.rtFar = 100;
     this.rtCamera = new THREE.PerspectiveCamera(this.rtFov, this.rtAspect, this.rtNear, this.rtFar);
 
     this.scene.add(this.rtCamera);
 
-    this.rtCamera.lookAt(this.mesh.position);
+    this.debugFolder
+      .add(this.rtCamera, 'fov', -100, 100, 0.01)
+      .name('fov')
+      .onChange((val) => this.rtCamera.updateProjectionMatrix());
+
     // this.rtCamera.position.z = 3;
     // this.rtCamera.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI);
+
+    this.rtCamera.lookAt(this.mesh.position);
 
     this.cameraHelper = new THREE.CameraHelper(this.rtCamera);
     // this.scene.add(this.cameraHelper);
   }
 
   setBackground() {
-    this.planeGeometry2 = new THREE.PlaneGeometry(10, 5);
+    this.planeGeometry2 = new THREE.PlaneGeometry(100, 100);
     this.planeMaterial2 = new THREE.MeshBasicMaterial({
       map: new THREE.TextureLoader().load('/textures/dirt/stars.jpg'),
     });
 
     this.plane2 = new THREE.Mesh(this.planeGeometry2, this.planeMaterial2);
 
-    this.plane2.position.z = -5;
-    this.plane2.position.y = 2.5;
+    // this.plane2.position.z = -5;
+    this.plane2.position.y = 99;
+    this.plane2.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
     this.scene.add(this.plane2);
   }
 
   setObject() {
-    this.planeGeometry = new THREE.PlaneGeometry(20, 20, 100, 100);
+    this.planeGeometry = new THREE.PlaneGeometry(100, 100, 100, 100);
     this.planeMaterial = new THREE.ShaderMaterial({
       //   wireframe: true,
       side: THREE.DoubleSide,
@@ -118,24 +125,25 @@ export default class MirrorRenderTarget {
 
     this.objectsToTest.push(this.plane);
 
-    const geom = new THREE.SphereGeometry(0.5, 50, 50);
+    const geom = new THREE.SphereGeometry(5, 50, 50);
     const mat = new THREE.MeshBasicMaterial({
       map: new THREE.TextureLoader().load('/textures/dirt/water.jpg'),
     });
     this.mesh = new THREE.Mesh(geom, mat);
-    this.mesh.position.z = -3;
-    this.mesh.position.y = 1;
+    // this.mesh.position.z = -3;
+    this.mesh.position.y = 50;
     this.scene.add(this.mesh);
 
-    this.debugFolder.add(this.mesh.position, 'x', -2, 2, 0.01).name('mirrorMeshX');
-    this.debugFolder.add(this.mesh.position, 'y', -2, 2, 0.01).name('mirrorMeshX');
+    this.debugFolder.add(this.mesh.position, 'x', -100, 100, 0.01).name('mirrorMeshX');
+    this.debugFolder.add(this.mesh.position, 'y', -100, 100, 0.01).name('mirrorMeshY');
+    this.debugFolder.add(this.mesh.position, 'z', -100, 100, 0.01).name('mirrorMeshZ');
   }
 
   centerCameraOnPlane() {
-    const cameraDist = this.camera.position.z;
-    const height = 2;
+    const cameraDist = this.rtCamera.position.z;
+    const height = 1;
 
-    this.camera.fov = 2 * (180 / Math.PI) * Math.atan(height / (cameraDist * 2));
+    this.rtCamera.fov = 2 * (180 / Math.PI) * Math.atan(height / (cameraDist * 2));
 
     // if (this.sizes.width / this.sizes.height > 1) {
     //   this.plane.scale.x = this.camera.aspect;
@@ -143,7 +151,7 @@ export default class MirrorRenderTarget {
     //   this.plane.scale.y = 1 / this.camera.aspect;
     // }
 
-    this.camera.updateProjectionMatrix();
+    this.rtCamera.updateProjectionMatrix();
   }
 
   raycast() {
@@ -211,7 +219,13 @@ export default class MirrorRenderTarget {
 
     this.mesh.rotation.x = this.time.elapsed * 0.0001;
     this.mesh.rotation.y = this.time.elapsed * 0.0001;
+    this.mesh.position.x = Math.sin(this.time.elapsed * 0.0005) * 3;
+    this.mesh.position.z = Math.cos(this.time.elapsed * 0.0005) * 3;
 
     this.cameraHelper.update();
+
+    // this.rtCamera.position.z = this.mesh.position.z;
+    // this.rtCamera.position.x = this.mesh.position.x;
+    // this.rtCamera.lookAt(this.mesh.position);
   }
 }
