@@ -18,6 +18,7 @@ import PlaneDistortion from './PlaneDistortion.js';
 import RadialTrigger from './RadialTrigger.js';
 import RaycastPlaceElementOnSphere from './RaycastPlaceElementOnSphere.js';
 import Ripples from './Ripples.js';
+import Sand from './Sand.js';
 import Shaders from './Shaders.js';
 import SteeringBehaviour from './SteeringBehaviour.js';
 import TrailTexture from './TrailTexture.js';
@@ -29,7 +30,7 @@ export default class World {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
-    // this.helper = new Helper();
+    this.helper = new Helper();
 
     // this.radialTrigger = new RadialTrigger();
     // this.lookAtTrigger = new LookAtTrigger();
@@ -43,7 +44,8 @@ export default class World {
     // this.water = new Water();
 
     // this.cameraScrolling = new CameraScrolingBehaviour();
-    this.mirrorRenderTarget = new MirrorRenderTarget();
+    // this.mirrorRenderTarget = new MirrorRenderTarget();
+    this.sand = new Sand();
     // this.trailTexture = new TrailTexture();
 
     // this.elementAroundSphere = new ElementAroundSphere();
@@ -88,5 +90,6 @@ export default class World {
     if (this.pillarRotate) this.pillarRotate.update();
     if (this.vinyl) this.vinyl.update();
     if (this.fire) this.fire.update();
+    if (this.sand) this.sand.update();
   }
 }
