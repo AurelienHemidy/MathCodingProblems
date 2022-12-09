@@ -221,6 +221,7 @@ export default class MirrorRenderTarget {
     this.mesh.rotation.y = this.time.elapsed * 0.0001;
     this.mesh.position.x = Math.sin(this.time.elapsed * 0.0005) * 3;
     this.mesh.position.z = Math.cos(this.time.elapsed * 0.0005) * 3;
+    this.mesh.position.y = 30 + Math.cos(this.time.elapsed * 0.0005) * 5;
 
     this.cameraHelper.update();
 
