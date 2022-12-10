@@ -2,8 +2,9 @@
 varying vec2 vUv;
 varying vec3 vNormal;
 varying vec3 vDirection;
+varying vec3 vPosition;
 
-uniform vec2 uMouse;
+uniform vec3 uMouse;
 uniform float uProgress;
 uniform float uTime;
 
@@ -89,9 +90,9 @@ float cnoise(vec3 P){
 
 void main() {
 
-    vec2 newMouse = uMouse + vec2(0.5);
+    // vec2 newMouse = uMouse + vec2(0.5);
 
-    float dist = smoothstep(0.8 * uProgress + 0.1, 0.1, length(uv - newMouse));
+    // float dist = smoothstep(0.8 + 0.1, 0.1, length(uv - newMouse));
 
     vec3 newpos = position;
 
@@ -101,21 +102,40 @@ void main() {
 
     // newpos += mod(aDirection * uTime * 0.05, 2.) * (1. - uProgress);
 
-    newpos.x += cos(uTime * 0.1) + cos(PI * aDirection.x);
-    newpos.z += sin(uTime * 0.1) + sin(PI * aDirection.z);
-    newpos.y = sin(aDirection.y + uTime * 0.2);
+    // newpos.x += cos(uTime * 0.1) + cos(PI * aDirection.x);
+    // newpos.z += sin(uTime * 0.1) + sin(PI * aDirection.z);
+    // newpos.y = sin(aDirection.y + uTime * 0.2);
+
     // newpos.y += sin(aDirection.y);
+
+    // x = r * cos(s) * sin(t)
+    // y = r * sin(s) * sin(t)
+    // z = r * cos(t)
+
+    newpos.x = 2. * cos(2. * PI * position.x * uTime * 0.1) * sin(2. * PI * position.y * uTime * 0.01) * 5. ;
+    newpos.y = 2. * sin(2. * PI * position.x * uTime * 0.1) * sin(2. * PI * position.y * uTime * 0.01) * 5. ;
+    newpos.z = 2. * cos(2. * PI * position.y * uTime * 0.01) * 5. ;
+
+
+    float dist = smoothstep(5., 0.3, length(newpos - uMouse));
+
+    // newpos.xyz += dot(newpos, vec3(dist)) * aDirection * 0.8 * cnoise(newpos * uTime * 0.1);
+    newpos.xyz += cross(newpos, vec3(dist)) * aDirection * 0.8 * cnoise(newpos * uTime * 0.1);
+    // newpos.y = sin(2. * PI * position.x) * position.y;
+    // newpos.y = cos(2. * PI * position.y) * position.y;
+    
 
     // newpos *= sin(uTime * 0.01) + 1. + cnoise(position + uTime * 0.01 - cnoise(position)) * uProgress;
 
     // // sin(uv.x + uTime * 0.2) * 0.1
 
 
-
+// (1. + uProgress * 4.)
     vec4 mvPosition = modelViewMatrix * vec4(newpos, 1.0);
-    gl_PointSize = 200. * (1. / -mvPosition.z);
+    gl_PointSize = 1000.* (1. / -mvPosition.z);
     gl_Position = projectionMatrix * mvPosition;
 
     vUv = uv;
     vDirection = aDirection;
+    vPosition = newpos;
 }

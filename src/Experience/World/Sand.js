@@ -34,6 +34,7 @@ export default class Sand {
 
     // this.setObject();
     this.setObjects();
+    this.setRaycastSpere();
     this.centerCameraOnPlane();
 
     this.mouseClickEvents();
@@ -78,8 +79,23 @@ export default class Sand {
     this.objectsToTest.push(this.plane);
   }
 
+  setRaycastSpere() {
+    this.raycastSphereGeometry = new THREE.SphereGeometry(10, 50, 50);
+    this.raycastSphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0,
+    });
+
+    this.raycastSphere = new THREE.Mesh(this.raycastSphereGeometry, this.raycastSphereMaterial);
+
+    this.objectsToTest.push(this.raycastSphere);
+
+    this.scene.add(this.raycastSphere);
+  }
+
   setObjects() {
-    const numberOfParticles = 10000;
+    const numberOfParticles = 100000;
 
     const particlesPosition = new Float32Array(numberOfParticles * 3);
     const particlesDir = new Float32Array(numberOfParticles * 3);
@@ -105,7 +121,7 @@ export default class Sand {
           value: 0,
         },
         uMouse: {
-          value: new THREE.Vector2(0, 0),
+          value: new THREE.Vector3(0, 0, 0),
         },
         uResolution: {
           value: new THREE.Vector4(window.innerWidth, window.innerHeight, 0),
@@ -119,7 +135,7 @@ export default class Sand {
     });
 
     for (let i = 0; i < numberOfParticles; i++) {
-      particlesPosition.set([0, 0, 0], i * 3);
+      particlesPosition.set([Math.random(), Math.random(), Math.random()], i * 3);
       particlesDir.set([Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2], i * 3);
     }
 
@@ -129,6 +145,8 @@ export default class Sand {
     console.log(this.particleGeometry);
 
     this.particles = new THREE.Points(this.particleGeometry, this.particleMaterial);
+
+    // this.objectsToTest.push(this.particles);
 
     this.scene.add(this.particles);
   }
@@ -154,7 +172,7 @@ export default class Sand {
     const intersect = this.raycaster.intersectObjects(this.objectsToTest);
 
     if (intersect.length > 0) {
-      //   console.log(intersect[0]);
+      console.log(intersect[0].point);
       this.particleMaterial.uniforms.uMouse.value = intersect[0].point;
     }
   }
@@ -163,7 +181,7 @@ export default class Sand {
     window.addEventListener('mousedown', () => {
       this.particleMaterial.uniforms.uDirection.value = 0;
       gsap.to(this.particleMaterial.uniforms.uProgress, {
-        duration: 0.5,
+        duration: 1.5,
         // ease: 'Power2.easeOut',
         value: 1,
       });
@@ -172,7 +190,7 @@ export default class Sand {
     window.addEventListener('mouseup', () => {
       this.particleMaterial.uniforms.uDirection.value = 1;
       gsap.to(this.particleMaterial.uniforms.uProgress, {
-        duration: 0.5,
+        duration: 1.5,
         // ease: 'Power2.easeOut',
         value: 0,
       });
