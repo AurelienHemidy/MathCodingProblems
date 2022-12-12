@@ -26,6 +26,8 @@ export default class Sand {
     this.mouse = new THREE.Vector2(0, 0);
     this.prevMouse = new THREE.Vector2(0, 0);
 
+    this.temp = new THREE.Vector3(0, 0, 0);
+
     this.speed = 0;
     this.targetSpeed = 0;
 
@@ -85,6 +87,7 @@ export default class Sand {
       color: 0xffffff,
       transparent: true,
       opacity: 0,
+      side: THREE.DoubleSide,
     });
 
     this.raycastSphere = new THREE.Mesh(this.raycastSphereGeometry, this.raycastSphereMaterial);
@@ -105,7 +108,7 @@ export default class Sand {
       //   wireframe: true,
       side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending,
-      depthTest: false,
+      // depthTest: false,
       depthWrite: false,
       uniforms: {
         uTime: {
@@ -121,6 +124,12 @@ export default class Sand {
           value: 0,
         },
         uMouse: {
+          value: new THREE.Vector3(0, 0, 0),
+        },
+        uMouseBehind: {
+          value: new THREE.Vector3(0, 0, 0),
+        },
+        uCameraPos: {
           value: new THREE.Vector3(0, 0, 0),
         },
         uResolution: {
@@ -142,7 +151,7 @@ export default class Sand {
     this.particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlesPosition, 3));
     this.particleGeometry.setAttribute('aDirection', new THREE.BufferAttribute(particlesDir, 3));
 
-    console.log(this.particleGeometry);
+    // console.log(this.particleGeometry);
 
     this.particles = new THREE.Points(this.particleGeometry, this.particleMaterial);
 
@@ -169,11 +178,13 @@ export default class Sand {
   raycast() {
     this.raycaster.setFromCamera(this.mouse, this.camera);
 
-    const intersect = this.raycaster.intersectObjects(this.objectsToTest);
+    const intersect = this.raycaster.intersectObjects(this.objectsToTest, true);
 
     if (intersect.length > 0) {
-      console.log(intersect[0].point);
       this.particleMaterial.uniforms.uMouse.value = intersect[0].point;
+      this.particleMaterial.uniforms.uMouseBehind.value = intersect[1].point;
+      this.particleMaterial.uniforms.uCameraPos.value = this.camera.getWorldDirection(this.temp);
+      // console.log(this.particleMaterial.uniforms.uCameraPos.value);
     }
   }
 

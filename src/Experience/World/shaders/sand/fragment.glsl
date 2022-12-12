@@ -7,6 +7,7 @@ varying vec2 vUv;
 varying vec3 vDirection;
 varying vec3 vPosition;
 uniform vec3 uResolution;
+uniform vec3 uMouseBehind;
 
 void main() {
 
@@ -16,7 +17,10 @@ void main() {
 
     // vec2 newMouse = uMouse + vec2(0.5);
     // float dist = smoothstep(10. * (1.+ 5. * uProgress), 0.3, length(vPosition - uMouse));
-    float dist = smoothstep(0.5, 20., length(vPosition - uMouse));
+    float distFront = smoothstep(0., 6., length(vPosition - uMouse));
+    float distBack = smoothstep(0., 6., length(vPosition - uMouseBehind));
+
+    float distFront2 = step(5., length(vPosition - uMouse));
 
     vec4 tex = texture2D(uTexture, uv);
 
@@ -31,6 +35,8 @@ void main() {
     gl_FragColor = color;
 
     // if (gl_FragColor.r < 0.01) discard;
+    // gl_FragColor = vec4(1. - distFront * distBack, 1. - distFront * distBack, 1. - distFront * distBack, 1.);
     // gl_FragColor = vec4(1., 1., 1., 1.);
+    // gl_FragColor = vec4(distFront2, distFront2, distFront2, 1.);
 
 }

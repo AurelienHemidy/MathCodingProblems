@@ -5,8 +5,10 @@ varying vec3 vDirection;
 varying vec3 vPosition;
 
 uniform vec3 uMouse;
+uniform vec3 uMouseBehind;
 uniform float uProgress;
 uniform float uTime;
+uniform vec3 uCameraPos;
 
 attribute vec3 aDirection;
 
@@ -112,18 +114,33 @@ void main() {
     // y = r * sin(s) * sin(t)
     // z = r * cos(t)
 
-    newpos.x = 2. * cos(2. * PI * position.x * uTime * 0.1) * sin(2. * PI * position.y * uTime * 0.01) * 5. ;
-    newpos.y = 2. * sin(2. * PI * position.x * uTime * 0.1) * sin(2. * PI * position.y * uTime * 0.01) * 5. ;
+    newpos.x = 2. * cos(2. * PI * position.x * uTime * 0.01) * sin(2. * PI * position.y * uTime * 0.01) * 5. ;
+    newpos.y = 2. * sin(2. * PI * position.x * uTime * 0.01) * sin(2. * PI * position.y * uTime * 0.01) * 5. ;
     newpos.z = 2. * cos(2. * PI * position.y * uTime * 0.01) * 5. ;
+    // newpos.x = 2. * cos(2. * PI * position.x) * sin(2. * PI * position.y) * 5. ;
+    // newpos.y = 2. * sin(2. * PI * position.x) * sin(2. * PI * position.y) * 5. ;
+    // newpos.z = 2. * cos(2. * PI * position.y) * 5. ;
 
 
-    float dist = smoothstep(5., 0.3, length(newpos - uMouse));
+    float distFront = smoothstep(0., 5., length(newpos - uMouse));
+    float distBack = smoothstep(0., 5., length(newpos - uMouseBehind));
+
+    float dist = 1. - distFront * distBack;
+
+    float distFront2 = step(5., length(newpos - uMouse));
+
 
     // newpos.xyz += dot(newpos, vec3(dist)) * aDirection * 0.8 * cnoise(newpos * uTime * 0.1);
-    newpos.xyz += cross(newpos, vec3(dist)) * aDirection * 0.8 * cnoise(newpos * uTime * 0.1);
+    // newpos.xyz += cross(newpos, vec3(distFront)) * aDirection * 0.8 * cnoise(newpos * uTime * 0.1);
+    // newpos.xyz += cross(newpos, vec3(distBack)) * aDirection * 0.8 * cnoise(newpos * uTime * 0.1);
     // newpos.y = sin(2. * PI * position.x) * position.y;
     // newpos.y = cos(2. * PI * position.y) * position.y;
     
+    // newpos.x += cross(normalize(uMouse), vec3(0., 1., 0.)).x * distFront * 10.;
+    
+    // newpos.z += cross(normalize(uMouse), uCameraPos).z * distFront * distBack * 10.;
+    newpos *= 1. + cnoise(newpos + uTime * 0.1) * dist * 0.2 * log(dot(uCameraPos, newpos));
+
 
     // newpos *= sin(uTime * 0.01) + 1. + cnoise(position + uTime * 0.01 - cnoise(position)) * uProgress;
 
