@@ -123,6 +123,9 @@ export default class Sand {
         uSpeed: {
           value: 0,
         },
+        uHover: {
+          value: 0,
+        },
         uMouse: {
           value: new THREE.Vector3(0, 0, 0),
         },
@@ -136,7 +139,7 @@ export default class Sand {
           value: new THREE.Vector4(window.innerWidth, window.innerHeight, 0),
         },
         uTexture: {
-          value: new THREE.TextureLoader().load('/textures/dirt/stars.jpg'),
+          value: new THREE.TextureLoader().load('/textures/dirt/matcap1.png'),
         },
       },
       vertexShader: vertexShader,
@@ -185,6 +188,17 @@ export default class Sand {
       this.particleMaterial.uniforms.uMouseBehind.value = intersect[1].point;
       this.particleMaterial.uniforms.uCameraPos.value = this.camera.getWorldDirection(this.temp);
       // console.log(this.particleMaterial.uniforms.uCameraPos.value);
+      gsap.to(this.particleMaterial.uniforms.uHover, {
+        duration: 1.5,
+        // ease: 'Power2.easeOut',
+        value: 1,
+      });
+    } else {
+      gsap.to(this.particleMaterial.uniforms.uHover, {
+        duration: 1.5,
+        // ease: 'Power2.easeOut',
+        value: 0,
+      });
     }
   }
 
@@ -196,6 +210,17 @@ export default class Sand {
         // ease: 'Power2.easeOut',
         value: 1,
       });
+
+      gsap.to(this.particles.rotation, {
+        duration: 1.5,
+        // ease: 'Power2.easeOut',
+        x: 1.5,
+      });
+      gsap.to(this.raycastSphere.rotation, {
+        duration: 1.5,
+        // ease: 'Power2.easeOut',
+        y: 1.5,
+      });
     });
 
     window.addEventListener('mouseup', () => {
@@ -204,6 +229,17 @@ export default class Sand {
         duration: 1.5,
         // ease: 'Power2.easeOut',
         value: 0,
+      });
+
+      gsap.to(this.particles.rotation, {
+        duration: 1.5,
+        // ease: 'Power2.easeOut',
+        x: 0,
+      });
+      gsap.to(this.raycastSphere.rotation, {
+        duration: 1.5,
+        // ease: 'Power2.easeOut',
+        y: 0,
       });
     });
   }

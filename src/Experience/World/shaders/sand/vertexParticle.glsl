@@ -8,6 +8,7 @@ uniform vec3 uMouse;
 uniform vec3 uMouseBehind;
 uniform float uProgress;
 uniform float uTime;
+uniform float uHover;
 uniform vec3 uCameraPos;
 
 attribute vec3 aDirection;
@@ -114,9 +115,9 @@ void main() {
     // y = r * sin(s) * sin(t)
     // z = r * cos(t)
 
-    newpos.x = 2. * cos(2. * PI * position.x * uTime * 0.01) * sin(2. * PI * position.y * uTime * 0.01) * 5. ;
-    newpos.y = 2. * sin(2. * PI * position.x * uTime * 0.01) * sin(2. * PI * position.y * uTime * 0.01) * 5. ;
-    newpos.z = 2. * cos(2. * PI * position.y * uTime * 0.01) * 5. ;
+    newpos.x = 2. * cos(2. * PI * position.x + uTime * 0.01) * sin(2. * PI * position.y + uTime * 0.01  + (1. * uProgress * 1.)) * 5. ;
+    newpos.y = 2. * sin(2. * PI * position.x + uTime * 0.01) * sin(2. * PI * position.y + uTime * 0.01 + (1. * uProgress * 1.4)) * 5. ;
+    newpos.z = 2. * cos(2. * PI * position.y + uTime * 0.01) * 5. ;
     // newpos.x = 2. * cos(2. * PI * position.x) * sin(2. * PI * position.y) * 5. ;
     // newpos.y = 2. * sin(2. * PI * position.x) * sin(2. * PI * position.y) * 5. ;
     // newpos.z = 2. * cos(2. * PI * position.y) * 5. ;
@@ -139,7 +140,7 @@ void main() {
     // newpos.x += cross(normalize(uMouse), vec3(0., 1., 0.)).x * distFront * 10.;
     
     // newpos.z += cross(normalize(uMouse), uCameraPos).z * distFront * distBack * 10.;
-    newpos *= 1. + cnoise(newpos + uTime * 0.1) * dist * 0.2 * log(dot(uCameraPos, newpos));
+    newpos *= 1. + cnoise(newpos + uTime * 0.01 ) * dist * 0.1 * dot(uCameraPos, newpos) * uHover;
 
 
     // newpos *= sin(uTime * 0.01) + 1. + cnoise(position + uTime * 0.01 - cnoise(position)) * uProgress;
@@ -148,8 +149,9 @@ void main() {
 
 
 // (1. + uProgress * 4.)
+// * (2. - dot(normalize(uCameraPos), normalize(newpos)))
     vec4 mvPosition = modelViewMatrix * vec4(newpos, 1.0);
-    gl_PointSize = 1000.* (1. / -mvPosition.z);
+    gl_PointSize = 1000.  * (1. / -mvPosition.z);
     gl_Position = projectionMatrix * mvPosition;
 
     vUv = uv;
