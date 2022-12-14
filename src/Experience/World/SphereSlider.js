@@ -28,6 +28,7 @@ export default class SphereSlider {
 
     this.mouse = new THREE.Vector2(0, 0);
     this.prevMouse = new THREE.Vector2(0, 0);
+    this.isMouseDown = false;
 
     this.speed = 0;
     this.targetSpeed = 0;
@@ -175,6 +176,7 @@ export default class SphereSlider {
 
   mouseClickEvents() {
     window.addEventListener('mousedown', () => {
+      this.isMouseDown = true;
       this.planeMaterial.uniforms.uDirection.value = 0;
       gsap.to(this.planeMaterial.uniforms.uProgress, {
         duration: 0.5,
@@ -184,6 +186,7 @@ export default class SphereSlider {
     });
 
     window.addEventListener('mouseup', () => {
+      this.isMouseDown = false;
       this.planeMaterial.uniforms.uDirection.value = 1;
       gsap.to(this.planeMaterial.uniforms.uProgress, {
         duration: 0.5,
@@ -205,16 +208,6 @@ export default class SphereSlider {
 
       this.lastTouchX = this.touchX;
     });
-
-    // window.addEventListener('pointermove', (e) => {
-    //   e.preventDefault();
-
-    //   this.touchX = e.changedTouches[0].clientX;
-    //   const direction = Math.sign(this.lastTouchX - this.touchX);
-    //   this.targetScroll += direction * ((Math.PI * 2 * 2.5) / window.innerWidth);
-
-    //   this.lastTouchX = this.touchX;
-    // });
   }
 
   mouseMoveEvent() {
@@ -223,6 +216,15 @@ export default class SphereSlider {
       this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
 
       //   this.planeMaterial.uniforms.uMouse.value = this.mouse;
+      //Chercher pourquoi ça ne fait pas un tour complet quand bnouger souris pour slider
+      if (this.isMouseDown) {
+        console.log((Math.PI * 2) / window.innerWidth);
+        this.touchX = event.clientX;
+        const direction = Math.sign(this.lastTouchX - this.touchX);
+        this.targetScroll += direction * ((Math.PI * 2) / window.innerWidth);
+
+        this.lastTouchX = this.touchX;
+      }
 
       this.raycast();
     });
