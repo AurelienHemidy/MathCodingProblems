@@ -20,6 +20,7 @@ import RaycastPlaceElementOnSphere from './RaycastPlaceElementOnSphere.js';
 import Ripples from './Ripples.js';
 import Sand from './Sand.js';
 import Shaders from './Shaders.js';
+import SphereSlider from './SphereSlider.js';
 import SteeringBehaviour from './SteeringBehaviour.js';
 import TrailTexture from './TrailTexture.js';
 import Vinyl from './Vinyl.js';
@@ -45,7 +46,8 @@ export default class World {
 
     // this.cameraScrolling = new CameraScrolingBehaviour();
     // this.mirrorRenderTarget = new MirrorRenderTarget();
-    this.sand = new Sand();
+    // this.sand = new Sand();
+    this.sphereSlider = new SphereSlider();
     // this.trailTexture = new TrailTexture();
 
     // this.elementAroundSphere = new ElementAroundSphere();
@@ -91,5 +93,6 @@ export default class World {
     if (this.vinyl) this.vinyl.update();
     if (this.fire) this.fire.update();
     if (this.sand) this.sand.update();
+    if (this.sphereSlider) this.sphereSlider.update();
   }
 }
