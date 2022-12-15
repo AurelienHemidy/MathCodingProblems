@@ -281,7 +281,7 @@ export default class SphereSlider {
       this.currentScroll += diffEase * 0.4;
 
       mesh.position.x = Math.sin(Math.PI * 2 * (i / this.nbOfProjects) - this.currentScroll) * 2.5;
-      mesh.position.y = -2.2 + Math.cos(Math.PI * 2 * (i / this.nbOfProjects) - this.currentScroll) * 2.5;
+      mesh.position.y = -1.7 + Math.cos(Math.PI * 2 * (i / this.nbOfProjects) - this.currentScroll) * 2.5;
 
       mesh.rotation.z = -Math.PI * 2 * (i / this.nbOfProjects) + this.currentScroll;
       //   if (i === 0) console.log(this.currentScroll);

@@ -35,8 +35,8 @@ export default class Sand {
     this.raycaster = new THREE.Raycaster();
 
     // this.setObject();
-    this.setObjects();
     this.setRaycastSpere();
+    this.setObjects();
     this.centerCameraOnPlane();
 
     this.mouseClickEvents();
@@ -82,7 +82,7 @@ export default class Sand {
   }
 
   setRaycastSpere() {
-    this.raycastSphereGeometry = new THREE.SphereGeometry(10, 50, 50);
+    this.raycastSphereGeometry = new THREE.SphereGeometry(0.8, 50, 50);
     this.raycastSphereMaterial = new THREE.MeshBasicMaterial({
       color: 0xffffff,
       transparent: true,
@@ -139,7 +139,7 @@ export default class Sand {
           value: new THREE.Vector4(window.innerWidth, window.innerHeight, 0),
         },
         uTexture: {
-          value: new THREE.TextureLoader().load('/textures/dirt/matcap1.png'),
+          value: new THREE.TextureLoader().load('/textures/dirt/stars.jpg'),
         },
       },
       vertexShader: vertexShader,
@@ -153,8 +153,6 @@ export default class Sand {
 
     this.particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlesPosition, 3));
     this.particleGeometry.setAttribute('aDirection', new THREE.BufferAttribute(particlesDir, 3));
-
-    // console.log(this.particleGeometry);
 
     this.particles = new THREE.Points(this.particleGeometry, this.particleMaterial);
 
@@ -187,7 +185,6 @@ export default class Sand {
       this.particleMaterial.uniforms.uMouse.value = intersect[0].point;
       this.particleMaterial.uniforms.uMouseBehind.value = intersect[1].point;
       this.particleMaterial.uniforms.uCameraPos.value = this.camera.getWorldDirection(this.temp);
-      // console.log(this.particleMaterial.uniforms.uCameraPos.value);
       gsap.to(this.particleMaterial.uniforms.uHover, {
         duration: 1.5,
         // ease: 'Power2.easeOut',
@@ -210,7 +207,6 @@ export default class Sand {
         // ease: 'Power2.easeOut',
         value: 1,
       });
-
       gsap.to(this.particles.rotation, {
         duration: 1.5,
         // ease: 'Power2.easeOut',
@@ -222,7 +218,6 @@ export default class Sand {
         y: 1.5,
       });
     });
-
     window.addEventListener('mouseup', () => {
       this.particleMaterial.uniforms.uDirection.value = 1;
       gsap.to(this.particleMaterial.uniforms.uProgress, {
@@ -230,7 +225,6 @@ export default class Sand {
         // ease: 'Power2.easeOut',
         value: 0,
       });
-
       gsap.to(this.particles.rotation, {
         duration: 1.5,
         // ease: 'Power2.easeOut',

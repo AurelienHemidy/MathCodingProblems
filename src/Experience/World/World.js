@@ -46,7 +46,7 @@ export default class World {
 
     // this.cameraScrolling = new CameraScrolingBehaviour();
     // this.mirrorRenderTarget = new MirrorRenderTarget();
-    // this.sand = new Sand();
+    this.sand = new Sand();
     this.sphereSlider = new SphereSlider();
     // this.trailTexture = new TrailTexture();
 

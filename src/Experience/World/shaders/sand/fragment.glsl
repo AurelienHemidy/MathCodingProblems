@@ -17,8 +17,8 @@ void main() {
 
     // vec2 newMouse = uMouse + vec2(0.5);
     // float dist = smoothstep(10. * (1.+ 5. * uProgress), 0.3, length(vPosition - uMouse));
-    float distFront = smoothstep(0., 6., length(vPosition - uMouse));
-    float distBack = smoothstep(0., 6., length(vPosition - uMouseBehind));
+    float distFront = smoothstep(0., .4, length(vPosition - uMouse));
+    float distBack = smoothstep(0., .4, length(vPosition - uMouseBehind));
 
     float distFront2 = step(5., length(vPosition - uMouse));
 
