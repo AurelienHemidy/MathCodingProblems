@@ -53,8 +53,9 @@ export default class SphereSlider {
     this.setProjectsCards();
     this.centerCameraOnPlane();
 
-    this.mouseClickEvents();
-    this.mouseMoveEvent();
+    this.mouseEvents();
+    this.touchEvents();
+    this.wheelEvents();
 
     // gsap.to(this.settings, {
     //   progress: 1,
@@ -177,7 +178,7 @@ export default class SphereSlider {
     }
   }
 
-  mouseClickEvents() {
+  mouseEvents() {
     window.addEventListener('mousedown', () => {
       this.isMouseDown = true;
       this.planeMaterial.uniforms.uDirection.value = 0;
@@ -186,6 +187,22 @@ export default class SphereSlider {
         // ease: 'Power2.easeOut',
         value: 1,
       });
+    });
+
+    window.addEventListener('mousemove', (event) => {
+      this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
+      this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
+
+      //   this.planeMaterial.uniforms.uMouse.value = this.mouse;
+
+      this.touchX = event.clientX;
+      this.direction = Math.sign(this.lastTouchX - this.touchX);
+
+      console.log(this.lastTouchX - this.touchX);
+
+      this.lastTouchX = this.touchX;
+
+      this.raycast();
     });
 
     window.addEventListener('mouseup', () => {
@@ -197,11 +214,15 @@ export default class SphereSlider {
         value: 0,
       });
     });
+  }
 
+  wheelEvents() {
     window.addEventListener('wheel', (e) => {
       this.targetScroll += Math.sign(e.wheelDeltaY) * 0.05;
     });
+  }
 
+  touchEvents() {
     window.addEventListener('touchstart', (e) => {
       this.isMouseDown = true;
     });
@@ -212,7 +233,6 @@ export default class SphereSlider {
       this.touchX = e.changedTouches[0].clientX;
 
       this.direction = Math.sign(this.lastTouchX - this.touchX);
-      // this.targetScroll += this.direction * ((Math.PI * 2 * 2.5) / window.innerWidth);
 
       this.lastTouchX = this.touchX;
     });
@@ -222,23 +242,8 @@ export default class SphereSlider {
     });
   }
 
-  mouseMoveEvent() {
-    window.addEventListener('mousemove', (event) => {
-      this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
-      this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
-
-      //   this.planeMaterial.uniforms.uMouse.value = this.mouse;
-
-      this.touchX = event.clientX;
-      this.direction = Math.sign(this.lastTouchX - this.touchX);
-      this.lastTouchX = this.touchX;
-
-      this.raycast();
-    });
-  }
-
   updateScroll() {
-    if (this.isMouseDown) {
+    if (this.isMouseDown && this.speed > 0) {
       this.targetScroll += this.direction * 0.05;
     }
   }
