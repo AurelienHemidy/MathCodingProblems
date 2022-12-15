@@ -52,6 +52,7 @@ export default class SphereSlider {
 
     this.setProjectsCards();
     this.centerCameraOnPlane();
+    this.setTextures();
 
     this.mouseEvents();
     this.touchEvents();
@@ -66,6 +67,27 @@ export default class SphereSlider {
     //     this.settings.isTransitionFinished = true;
     //   },
     // });
+  }
+
+  setTextures() {
+    const textureLoader = new THREE.TextureLoader();
+    const textures = [
+      '/textures/dirt/stars.jpg',
+      '/textures/dirt/planeTex.jpg',
+      '/textures/dirt/stars.jpg',
+      '/textures/dirt/stars.jpg',
+      '/textures/dirt/stars.jpg',
+      '/textures/dirt/stars.jpg',
+      '/textures/dirt/stars.jpg',
+      '/textures/dirt/stars.jpg',
+      '/textures/dirt/stars.jpg',
+      '/textures/dirt/stars.jpg',
+    ];
+
+    textures.forEach((tex, i) => {
+      this.meshes[i].material.uniforms.uTexture.value = textureLoader.load(tex);
+      console.log(this.meshes[i].material.uniforms.uTexture.value);
+    });
   }
 
   setProjectsCards() {
@@ -197,8 +219,6 @@ export default class SphereSlider {
 
       this.touchX = event.clientX;
       this.direction = Math.sign(this.lastTouchX - this.touchX);
-
-      console.log(this.lastTouchX - this.touchX);
 
       this.lastTouchX = this.touchX;
 

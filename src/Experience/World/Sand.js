@@ -207,16 +207,16 @@ export default class Sand {
         // ease: 'Power2.easeOut',
         value: 1,
       });
-      gsap.to(this.particles.rotation, {
-        duration: 1.5,
-        // ease: 'Power2.easeOut',
-        x: 1.5,
-      });
-      gsap.to(this.raycastSphere.rotation, {
-        duration: 1.5,
-        // ease: 'Power2.easeOut',
-        y: 1.5,
-      });
+      // gsap.to(this.particles.rotation, {
+      //   duration: 1.5,
+      //   // ease: 'Power2.easeOut',
+      //   x: 1.5,
+      // });
+      // gsap.to(this.raycastSphere.rotation, {
+      //   duration: 1.5,
+      //   // ease: 'Power2.easeOut',
+      //   y: 1.5,
+      // });
     });
     window.addEventListener('mouseup', () => {
       this.particleMaterial.uniforms.uDirection.value = 1;
@@ -225,16 +225,16 @@ export default class Sand {
         // ease: 'Power2.easeOut',
         value: 0,
       });
-      gsap.to(this.particles.rotation, {
-        duration: 1.5,
-        // ease: 'Power2.easeOut',
-        x: 0,
-      });
-      gsap.to(this.raycastSphere.rotation, {
-        duration: 1.5,
-        // ease: 'Power2.easeOut',
-        y: 0,
-      });
+      // gsap.to(this.particles.rotation, {
+      //   duration: 1.5,
+      //   // ease: 'Power2.easeOut',
+      //   x: 0,
+      // });
+      // gsap.to(this.raycastSphere.rotation, {
+      //   duration: 1.5,
+      //   // ease: 'Power2.easeOut',
+      //   y: 0,
+      // });
     });
   }
 
