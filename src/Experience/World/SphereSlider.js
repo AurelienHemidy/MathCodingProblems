@@ -20,9 +20,11 @@ export default class SphereSlider {
       this.debugFolder = this.debug.ui.addFolder('SphereSlider');
     }
     this.settings = {
-      progress: 0,
-      isTransitionFinished: false,
+      progress: 1,
+      isTransitionFinished: true,
     };
+
+    this.test = 0;
 
     this.debugFolder.add(this.settings, 'progress', 0, 1, 0.01);
 
@@ -36,6 +38,7 @@ export default class SphereSlider {
     this.scroll = 0;
     this.targetScroll = 0;
     this.currentScroll = 0;
+    this.direction = 0;
 
     this.touchX = 0;
     this.lastTouchX = 0;
@@ -53,15 +56,15 @@ export default class SphereSlider {
     this.mouseClickEvents();
     this.mouseMoveEvent();
 
-    gsap.to(this.settings, {
-      progress: 1,
-      duration: 2,
-      delay: 0.2,
-      ease: 'cubic-bezier(1,.04,1,-0.92)',
-      onComplete: () => {
-        this.settings.isTransitionFinished = true;
-      },
-    });
+    // gsap.to(this.settings, {
+    //   progress: 1,
+    //   duration: 2,
+    //   delay: 0.2,
+    //   ease: 'cubic-bezier(1,.04,1,-0.92)',
+    //   onComplete: () => {
+    //     this.settings.isTransitionFinished = true;
+    //   },
+    // });
   }
 
   setProjectsCards() {
@@ -199,14 +202,23 @@ export default class SphereSlider {
       this.targetScroll += Math.sign(e.wheelDeltaY) * 0.05;
     });
 
+    window.addEventListener('touchstart', (e) => {
+      this.isMouseDown = true;
+    });
+
     window.addEventListener('touchmove', (e) => {
       e.preventDefault();
 
       this.touchX = e.changedTouches[0].clientX;
-      const direction = Math.sign(this.lastTouchX - this.touchX);
-      this.targetScroll += direction * ((Math.PI * 2 * 2.5) / window.innerWidth);
+
+      this.direction = Math.sign(this.lastTouchX - this.touchX);
+      // this.targetScroll += this.direction * ((Math.PI * 2 * 2.5) / window.innerWidth);
 
       this.lastTouchX = this.touchX;
+    });
+
+    window.addEventListener('touchend', (e) => {
+      this.isMouseDown = false;
     });
   }
 
@@ -216,18 +228,19 @@ export default class SphereSlider {
       this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
 
       //   this.planeMaterial.uniforms.uMouse.value = this.mouse;
-      //Chercher pourquoi ça ne fait pas un tour complet quand bnouger souris pour slider
-      if (this.isMouseDown) {
-        console.log((Math.PI * 2) / window.innerWidth);
-        this.touchX = event.clientX;
-        const direction = Math.sign(this.lastTouchX - this.touchX);
-        this.targetScroll += direction * ((Math.PI * 2) / window.innerWidth);
 
-        this.lastTouchX = this.touchX;
-      }
+      this.touchX = event.clientX;
+      this.direction = Math.sign(this.lastTouchX - this.touchX);
+      this.lastTouchX = this.touchX;
 
       this.raycast();
     });
+  }
+
+  updateScroll() {
+    if (this.isMouseDown) {
+      this.targetScroll += this.direction * 0.05;
+    }
   }
 
   getSpeed() {
@@ -275,6 +288,8 @@ export default class SphereSlider {
   update() {
     this.planeMaterial.uniforms.uTime.value = this.time.elapsed * 0.01;
     this.getSpeed();
+
+    this.updateScroll();
 
     this.scroll += (this.targetScroll - this.scroll) * 0.1;
 
