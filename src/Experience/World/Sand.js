@@ -108,7 +108,7 @@ export default class Sand {
       //   wireframe: true,
       side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending,
-      // depthTest: false,
+      depthTest: false,
       depthWrite: false,
       uniforms: {
         uTime: {

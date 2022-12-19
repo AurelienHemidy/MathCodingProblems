@@ -47,7 +47,7 @@ export default class SphereSlider {
     this.raycaster = new THREE.Raycaster();
 
     this.meshes = [];
-    this.meshesProgresses = [];
+    // this.meshesMaterials = [];
     this.nbOfProjects = 10;
 
     this.setProjectsCards();
@@ -75,13 +75,13 @@ export default class SphereSlider {
       '/textures/dirt/stars.jpg',
       '/textures/dirt/planeTex.jpg',
       '/textures/dirt/stars.jpg',
+      '/textures/dirt/planeTex.jpg',
       '/textures/dirt/stars.jpg',
+      '/textures/dirt/planeTex.jpg',
       '/textures/dirt/stars.jpg',
+      '/textures/dirt/planeTex.jpg',
       '/textures/dirt/stars.jpg',
-      '/textures/dirt/stars.jpg',
-      '/textures/dirt/stars.jpg',
-      '/textures/dirt/stars.jpg',
-      '/textures/dirt/stars.jpg',
+      '/textures/dirt/planeTex.jpg',
     ];
 
     textures.forEach((tex, i) => {
@@ -92,38 +92,37 @@ export default class SphereSlider {
 
   setProjectsCards() {
     this.planeGeometry = new THREE.PlaneGeometry(0.8, 1);
-    this.planeMaterial = new THREE.ShaderMaterial({
-      //   wireframe: true,
-      side: THREE.DoubleSide,
-      uniforms: {
-        uTime: {
-          value: 0,
-        },
-        uProgress: {
-          value: this.settings.progress,
-        },
-        uDirection: {
-          value: 0,
-        },
-        uSpeed: {
-          value: 0,
-        },
-        uMouse: {
-          value: new THREE.Vector2(0, 0),
-        },
-        uResolution: {
-          value: new THREE.Vector4(0, 0, 0),
-        },
-        uTexture: {
-          value: new THREE.TextureLoader().load('/textures/dirt/stars.jpg'),
-        },
-      },
-      vertexShader: vertexShader,
-      fragmentShader: fragmentShader,
-    });
-
     for (let i = 0; i < this.nbOfProjects; i++) {
-      const mesh = new THREE.Mesh(this.planeGeometry, this.planeMaterial);
+      const planeMaterial = new THREE.ShaderMaterial({
+        //   wireframe: true,
+        side: THREE.DoubleSide,
+        uniforms: {
+          uTime: {
+            value: 0,
+          },
+          uProgress: {
+            value: this.settings.progress,
+          },
+          uDirection: {
+            value: 0,
+          },
+          uSpeed: {
+            value: 0,
+          },
+          uMouse: {
+            value: new THREE.Vector2(0, 0),
+          },
+          uResolution: {
+            value: new THREE.Vector4(0, 0, 0),
+          },
+          uTexture: {
+            value: new THREE.TextureLoader().load('/textures/dirt/stars.jpg'),
+          },
+        },
+        vertexShader: vertexShader,
+        fragmentShader: fragmentShader,
+      });
+      const mesh = new THREE.Mesh(this.planeGeometry, planeMaterial);
 
       this.meshes.push(mesh);
 
@@ -196,19 +195,22 @@ export default class SphereSlider {
     const intersect = this.raycaster.intersectObjects(this.objectsToTest);
 
     if (intersect.length > 0) {
-      this.planeMaterial.uniforms.uMouse.value = intersect[0].uv;
+      this.meshes.forEach((mesh, i) => {
+        mesh.material.uniforms.uMouse.value = intersect[0].uv;
+      });
+      // this.planeMaterial.uniforms.uMouse.value = intersect[0].uv;
     }
   }
 
   mouseEvents() {
     window.addEventListener('mousedown', () => {
       this.isMouseDown = true;
-      this.planeMaterial.uniforms.uDirection.value = 0;
-      gsap.to(this.planeMaterial.uniforms.uProgress, {
-        duration: 0.5,
-        // ease: 'Power2.easeOut',
-        value: 1,
-      });
+      // this.planeMaterial.uniforms.uDirection.value = 0;
+      // gsap.to(this.planeMaterial.uniforms.uProgress, {
+      //   duration: 0.5,
+      //   // ease: 'Power2.easeOut',
+      //   value: 1,
+      // });
     });
 
     window.addEventListener('mousemove', (event) => {
@@ -227,12 +229,12 @@ export default class SphereSlider {
 
     window.addEventListener('mouseup', () => {
       this.isMouseDown = false;
-      this.planeMaterial.uniforms.uDirection.value = 1;
-      gsap.to(this.planeMaterial.uniforms.uProgress, {
-        duration: 0.5,
-        // ease: 'Power2.easeOut',
-        value: 0,
-      });
+      // this.planeMaterial.uniforms.uDirection.value = 1;
+      // gsap.to(this.planeMaterial.uniforms.uProgress, {
+      //   duration: 0.5,
+      //   // ease: 'Power2.easeOut',
+      //   value: 0,
+      // });
     });
   }
 
@@ -274,7 +276,10 @@ export default class SphereSlider {
     this.targetSpeed += 0.1 * (this.speed - this.targetSpeed);
 
     // console.log(this.speed);
-    this.planeMaterial.uniforms.uSpeed.value = this.targetSpeed;
+    // this.planeMaterial.uniforms.uSpeed.value = this.targetSpeed;
+    this.meshes.forEach((mesh, i) => {
+      mesh.material.uniforms.uSpeed.value = this.targetSpeed;
+    });
 
     this.prevMouse.x = this.mouse.x;
     this.prevMouse.y = this.mouse.y;
@@ -286,6 +291,7 @@ export default class SphereSlider {
 
   updateMeshes() {
     this.meshes.forEach((mesh, i) => {
+      mesh.material.uniforms.uTime.value = this.time.elapsed * 0.01;
       if (!this.settings.isTransitionFinished) {
         mesh.position.x = Math.sin(Math.PI * 2 * (i / this.nbOfProjects) * this.settings.progress) * 2.5;
         mesh.position.y = -2.2 + Math.cos(Math.PI * 2 * (i / this.nbOfProjects) * this.settings.progress) * 2.5;
@@ -311,7 +317,6 @@ export default class SphereSlider {
   }
 
   update() {
-    this.planeMaterial.uniforms.uTime.value = this.time.elapsed * 0.01;
     this.getSpeed();
 
     this.updateScroll();

@@ -21,6 +21,7 @@ import Ripples from './Ripples.js';
 import Sand from './Sand.js';
 import Shaders from './Shaders.js';
 import SphereSlider from './SphereSlider.js';
+import StarsBackground from './StarsBackground.js';
 import SteeringBehaviour from './SteeringBehaviour.js';
 import TrailTexture from './TrailTexture.js';
 import Vinyl from './Vinyl.js';
@@ -48,6 +49,7 @@ export default class World {
     // this.mirrorRenderTarget = new MirrorRenderTarget();
     this.sand = new Sand();
     this.sphereSlider = new SphereSlider();
+    this.starsBackground = new StarsBackground();
     // this.trailTexture = new TrailTexture();
 
     // this.elementAroundSphere = new ElementAroundSphere();
@@ -94,5 +96,6 @@ export default class World {
     if (this.fire) this.fire.update();
     if (this.sand) this.sand.update();
     if (this.sphereSlider) this.sphereSlider.update();
+    if (this.starsBackground) this.starsBackground.update();
   }
 }
